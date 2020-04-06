@@ -35,22 +35,19 @@
 .login-card {
   padding: 1rem;
 }
-.service-img {
-  width: 400px;
-}
 .service-card {
   width: 100%;
 }
-.service-list {
-  width: 500px;
-  height: 5rem;
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
 }
 .profile {
   background-color: #3c546b;
 }
 #profile-name {
   color: #ffffff;
-  min-width: 10rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
