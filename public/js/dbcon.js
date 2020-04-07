@@ -1,27 +1,31 @@
 var ui = new firebaseui.auth.AuthUI(firebase.auth())
 var uiConfig = {
   callbacks: {
-    signInSuccess: function() {
+    signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+      console.log({ authResult, redirectUrl })
+    },
+    signInSuccess: function () {
       $('#login-modal').modal('hide')
     },
-    uiShown: function() {
+    uiShown: function () {
       // The widget is rendered.
       // Hide the loader.
       document.getElementById('loader').style.display = 'none'
-    }
+    },
   },
   // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
   signInFlow: 'popup',
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID
-  ]
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+  ],
 }
 ui.start('#firebaseui-auth-container', uiConfig)
 // login
 $('#profile-nav').hide()
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     $('#login-nav').hide()
     $('#profile-nav').show()
@@ -35,15 +39,15 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 })
 
-$('#logout').on('click', function() {
+$('#logout').on('click', function () {
   firebase
     .auth()
     .signOut()
-    .then(function() {
+    .then(function () {
       localStorage.clear()
       location.reload()
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(err)
     })
 })
