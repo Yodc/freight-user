@@ -38,7 +38,9 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">JN Success</a>
+      <a class="navbar-brand js-scroll-trigger" href="#page-top"><img width="38W"
+          src="https://firebasestorage.googleapis.com/v0/b/freight-f4226.appspot.com/o/53292295_1976948449266852_8888733963544166400_n.png?alt=media&token=a0518124-c999-4940-8b9f-fc871662672f"
+          alt="logo"> JN Success</a>
       <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button"
         data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
         aria-label="Toggle navigation">
@@ -58,13 +60,13 @@
               id="login">Login</a>
           </li>
           <li class="nav-item mx-0 mx-lg-1 dropduwn" id="profile-nav">
-            <a class="nav-link dropdown-toggle profile text-sub rounded" href="#" id='profile-name' role="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle py-3 px-0 px-lg-3 profile text-sub rounded" href="#" id='profile-name'
+              role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             </a>
             <div class="dropdown-menu" aria-labelledby="profile">
               <a class="dropdown-item link" id="profiles">Profile</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item link" id="status" data-toggle="modal" data-target="#status-modal">Status</a>
+              <a class="dropdown-item link" id="status">Status</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item link" id="logout">Log out</a>
             </div>
@@ -110,37 +112,42 @@
         </div>
         <div class="modal-body p-1">
           <form>
-            <div class="form-group" id="signup-email">
+            <div class="form-group notProfile">
               <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" autocomplete="username" id="signup-email"
+              <input type="email" class="form-control" autocomplete="email" id="signup-email"
                 aria-describedby="emailHelp">
             </div>
-            <div class="form-group">
+            <div class="form-group notProfile">
               <label id='changePass' for="exampleInputPassword1">Password</label>
               <input type="password" class="form-control" autocomplete="new-password" id="signup-password">
             </div>
-            <div class="form-group">
+            <div class="form-group notProfile">
               <label for="exampleInputPassword1">Confirm Password</label>
               <input type="password" class="form-control" autocomplete="new-password" id="signup-conpassword">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Company Name</label>
+              <label for="companyName" id="companyName">Company Name</label>
               <input type="text" class="form-control" id="signup-company" aria-describedby="company">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">First Name</label>
+              <label for="firstName" id="firstName">First Name</label>
               <input type="text" class="form-control" id="signup-first_name" aria-describedby="first_name">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Last Name</label>
+              <label for="lastName" id="lastName">Last Name</label>
               <input type="text" class="form-control" id="signup-last_name" aria-describedby="last_name">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Tel.</label>
+              <label for="telePhone" id="telePhone">Tel.</label>
               <input type="text" class="form-control" id="signup-tel" aria-describedby="tel">
             </div>
             <div class="form-group">
-              <input type="submit" value="Sign Up" id="signup-submit" class="btn btn-primary btn-lg btn-block ">
+              <label for="exampleFormControlSelect1">Address</label>
+              <textarea type="text" rows="3" class="form-control" id="signup-address"></textarea>
+
+            </div>
+            <div class="form-group">
+              <button id="signup-submit" type="button" class="btn btn-primary btn-lg btn-block ">Sign Up</button>
             </div>
           </form>
         </div>
@@ -158,53 +165,69 @@
           </button>
         </div>
         <div class="modal-body p-1">
-          <div id='status-card' class="mb-3">
+          <div id='status-card' class="mb-3 mx-3">
             <ol class="step-bar">
-              <li class="is-active"><span>Booking</li>
-              <li><span>Appointment</span></li>
-              <li><span>Invoice</span></li>
-              <li><span>Receipt</span></li>
+              <li id="nodata"><span>Booking</span></li>
+              <li id="appointment"><span>Confirm Appointment</span></li>
+              <li id="invoice"><span>Invoice</span></li>
+              <li id="receipt"><span>Receipt</span></li>
             </ol>
           </div>
           <form name="bookingform" class="booking-form" id="newbooking" novalidate="novalidate">
             <div class="form-head mb-2">Create New Booking</div>
+            <div class="input-group form-group col-md-12">
+              <div class="input-group-prepend">
+                <label class="input-group-text" id="basic-addon1">Width Height Depth(cm)</label>
+              </div>
+              <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="booking_width">
+              <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="booking_height">
+              <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="booking_depth">
+
+            </div>
+            <div class="form-row mx-2">
+              <div class="form-group col-md-3">
+                <label for="quantity">Quantity</label>
+                <input type="text" class="form-control" id="booking_quantity">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="quantity">Weight</label>
+                <input type="text" class="form-control" id="booking_weight">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="to" class="d-block">Type</label>
+                <div class="btn-group " role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-secondary type-box booking-type active">Box</button>
+                  <button type="button" class="btn btn-secondary type-carton booking-type">Carton</button>
+                  <button type="button" class="btn btn-secondary type-pallet booking-type">Pallet</button>
+                  <button type="button" class="btn btn-secondary type-wooden booking-type">Wooden case</button>
+                </div>
+              </div>
+            </div>
             <p class="mx-2">Choose your type of transport</p>
             <div class="d-flex justify-content-between mb-4">
-              <div class="card booking-card mx-3" id='air-booking-card' style="width: 18rem;">
+              <div class="card booking-card mx-3 active" id='air-booking-card' style="width: 18rem;">
                 <div class="card-body d-flex flex-column justify-content-between  text-center">
                   <img src="./img/undraw_aircraft_fbvl.svg" class="card-img-top mb-2" alt="...">
                   <div>Air</div>
-                  <div class="form-check card-text hide">
-                    <input class="form-check-input booking-trans" type="radio" name="transport_type" id="air_booking"
-                      value="air_type">
-                  </div>
                 </div>
               </div>
               <div class="card booking-card mx-3" id='sea-booking-card' style="width: 18rem;">
                 <div class="card-body  d-flex flex-column justify-content-between text-center">
                   <img src="./img/undraw_Yacht_8g6r.svg" class="card-img-top mb-2" alt="...">
                   <div>Sea</div>
-                  <div class="form-check card-text hide">
-                    <input class="form-check-input booking-trans" type="radio" name="transport_type" id="sea_booking"
-                      value="sea_type">
-                  </div>
                 </div>
               </div>
               <div class="card booking-card mx-3" id='land-booking-card' style="width: 18rem;">
                 <div class="card-body  d-flex flex-column justify-content-between text-center">
                   <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
                   <div>Land</div>
-                  <div class="form-check card-text hide">
-                    <input class="form-check-input booking-trans" type="radio" name="transport_type" id="land_booking"
-                      value="land_type">
-                  </div>
                 </div>
               </div>
             </div>
             <div class="form-row mx-2 input-tran" id="air-trans">
               <div class="form-group col-md-5">
-                <label for="exampleFormControlSelect1">from</label>
-                <select class="custom-select stat-from thai-air">
+                <label for="exampleFormControlSelect1">Origin</label>
+                <select class="custom-select air-from thai-air">
                 </select>
               </div>
               <div class="col-md-2 mb-3 d-flex justify-content-center align-items-end">
@@ -212,15 +235,15 @@
                     class="fas fa-exchange-alt"></i></button>
               </div>
               <div class="form-group col-md-5">
-                <label for="exampleFormControlSelect1">To</label>
-                <select class="custom-select stat-to inter-air">
+                <label for="exampleFormControlSelect1">Destination</label>
+                <select class="custom-select air-to inter-air">
                 </select>
               </div>
             </div>
             <div class="form-row mx-2 input-tran hide" id="sea-trans">
               <div class="form-group col-md-5">
-                <label for="exampleFormControlSelect1">from</label>
-                <select class="custom-select stat-from thai-sea">
+                <label for="exampleFormControlSelect1">Origin</label>
+                <select class="custom-select sea-from thai-sea">
                 </select>
               </div>
               <div class="col-md-2 mb-3 d-flex justify-content-center align-items-end">
@@ -228,40 +251,46 @@
                     class="fas fa-exchange-alt"></i></button>
               </div>
               <div class="form-group col-md-5">
-                <label for="exampleFormControlSelect1">To</label>
-                <select class="custom-select stat-to inter-sea">
+                <label for="exampleFormControlSelect1">Destination</label>
+                <select class="custom-select sea-to inter-sea">
                 </select>
               </div>
             </div>
             <div class="form-row mx-2 input-tran hide" id="land-trans">
               <div class="form-group col-md-12">
-                <label for="exampleFormControlSelect1">from</label>
+                <label for="exampleFormControlSelect1">Origin</label>
                 <textarea type="text" rows="3" class="form-control" id="ip-from"></textarea>
-                
+
               </div>
               <div class="form-group col-md-12">
-                <label for="exampleFormControlSelect1">To</label>
+                <label for="exampleFormControlSelect1">Destination</label>
                 <textarea type="text" rows="3" class="form-control" id="ip-to"></textarea>
-                
+
               </div>
             </div>
             <div class="form-group mx-2">
               <label for="exampleFormControlFile1">Estimate Time Arrive</label>
-              <input type="date" class="form-control" id="eta" accept=".pdf">
+              <input type="date" class="form-control" id="booking_eta" accept=".pdf">
             </div>
             <div class="form-group mx-2">
               <label for="exampleFormControlFile1">Packing List</label>
-              <input type="file" class="form-control-file" id="packing-list" accept=".pdf">
+              <input type="file" class="form-control-file" id="booking_packing_list" accept=".pdf">
             </div>
             <div class="form-group mx-2">
               <label for="exampleFormControlFile1">Invoice</label>
-              <input type="file" class="form-control-file" id="invoice" accept=".pdf">
+              <input type="file" class="form-control-file" id="booking_invoice" accept=".pdf">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" id="booking-submit" class="btn btn-primary">Booking</button>
           </form>
         </div>
       </div>
     </div>
+  </div>
+  <div class="alert alert-dismissible hide myAlert mx-3 mt-3 w-75" role="alert">
+    <div id="alert_text"></div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <!-- Masthead -->
   <header class="masthead bg-light text-secondary text-center">
@@ -481,25 +510,25 @@
                 <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="depth">
 
               </div>
-              <div class="form-group col-md-3">
-                <label for="quantity">Quantity</label>
-                <input type="text" class="form-control" id="quantity">
-              </div>
-              <div class="form-group col-md-3">
-                <label for="quantity">Weight</label>
-                <input type="text" class="form-control" id="weight">
-              </div>
-
-              <div class="form-group col-md-12">
-                <label for="to" class="d-block">Type</label>
-                <div class="btn-group " role="group" aria-label="Basic example">
-                  <button type="button" id="type-box" class="btn type-btn btn-secondary active">Box</button>
-                  <button type="button" id="type-carton" class="btn type-btn btn-secondary">Carton</button>
-                  <button type="button" id="type-pallet" class="btn type-btn btn-secondary">Pallet</button>
-                  <button type="button" id="type-wooden" class="btn type-btn btn-secondary">Wooden case</button>
+              <div class="form-row mx-2">
+                <div class="form-group col-md-3">
+                  <label for="quantity">Quantity</label>
+                  <input type="text" class="form-control" id="quantity">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="quantity">Weight</label>
+                  <input type="text" class="form-control" id="weight">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="to" class="d-block">Type</label>
+                  <div class="btn-group " role="group" aria-label="Basic example">
+                    <button type="button" id="type-box" class="btn type-btn btn-secondary active">Box</button>
+                    <button type="button" id="type-carton" class="btn type-btn btn-secondary">Carton</button>
+                    <button type="button" id="type-pallet" class="btn type-btn btn-secondary">Pallet</button>
+                    <button type="button" id="type-wooden" class="btn type-btn btn-secondary">Wooden case</button>
+                  </div>
                 </div>
               </div>
-
             </form>
             <form name="transportform" class="quote-form hide" id="transportform" novalidate="novalidate">
               <div class="form-head mb-2">Choose your type of transport</div>
@@ -662,6 +691,7 @@
   <script src="/__/firebase/init.js"></script>
   <!-- Custom scripts for this template -->
   <script src="./js/freelancer.js"></script>
+  <script src="./js/firebase.js"></script>
   <script src="./js/main.js"></script>
   <script src="./js/dbcon.js"></script>
   <script src="./js/api.js"></script>

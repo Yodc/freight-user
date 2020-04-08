@@ -1,12 +1,24 @@
-var ui = new firebaseui.auth.AuthUI(firebase.auth())
+let ui = new firebaseui.auth.AuthUI(auth)
 var uiConfig = {
   callbacks: {
-    signInSuccessWithAuthResult: function (authResult, redirectUrl) {
-      console.log({ authResult, redirectUrl })
-    },
-    signInSuccess: function () {
+    signInSuccessWithAuthResult: function (authResult) {
+      if (authResult.additionalUserInfo.isNewUser) {
+        db.collection('users')
+          .doc(authResult.user.uid)
+          .set({
+            first_name: authResult.user.displayName.split(' ')[0],
+            last_name: authResult.user.displayName.split(' ')[1],
+            tel: authResult.user.phoneNumber,
+            status: 'nodata',
+          })
+        db.collection('status').doc(authResult.user.uid).set({
+          booking: null,
+        })
+      }
       $('#login-modal').modal('hide')
+      return true
     },
+
     uiShown: function () {
       // The widget is rendered.
       // Hide the loader.
@@ -27,11 +39,14 @@ ui.start('#firebaseui-auth-container', uiConfig)
 $('#profile-nav').hide()
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
+    db.collection('users')
+      .doc(user.uid)
+      .onSnapshot(function (doc) {
+        $('#profile-name').html(`Welcome, ${doc.data().first_name}`)
+        $('#profile-nav').show()
+      })
+
     $('#login-nav').hide()
-    $('#profile-nav').show()
-    $('#profile-name').html(
-      ` <img class="avatar" src="${user.photoURL}"avatar="${user.displayName}">`
-    )
   } else {
     // No user is signed in.
     $('#profile-nav').hide()

@@ -96,30 +96,137 @@ $('#sentform').on('click', function () {
       break
   }
 })
-$('#profiles').on('click', function () {
+alertMessage = (message, type) => {
+  $('#alert_text').html(message)
+  $('.alert').removeClass('alert-success alert-danger alert-warning hide')
+  $('.alert').addClass(`alert-${type}`)
+  $('.alert').addClass('show fade')
+}
+$('#profiles').on('click', function (e) {
   $('#signup-modal').modal('show')
   $('#changePass').html('New Password')
   $('#signup-title').html('Update Profile')
-  $('#signup-email').remove()
-  if (firebase.auth().currentUser) {
-  }
+  $('.notProfile').remove()
+  $('#signup-submit').html('Update Profile')
+  $('#signup-submit').on('click', function () {
+    e.preventDefault()
+    db.collection('users')
+      .doc(auth.currentUser.uid)
+      .update({
+        first_name: $('#signup-first_name').val(),
+        last_name: $('#signup-last_name').val(),
+        company_name: $('#signup-company').val(),
+        tel: $('#signup-tel').val(),
+        address: $('#signup-address').val(),
+      })
+      .then(function () {
+        alertMessage('Update Profile Complete', 'success')
+      })
+      .catch(function (error) {
+        alertMessage(error, 'danger')
+      })
+    $('#signup-modal').modal('hide')
+  })
+  db.collection('users')
+    .doc(auth.currentUser.uid)
+    .get()
+    .then(function (doc) {
+      $('#signup-company').val(doc.data().company_name)
+      $('#signup-first_name').val(doc.data().first_name)
+      $('#signup-last_name').val(doc.data().last_name)
+      $('#signup-tel').val(doc.data().tel)
+      $('#signup-address').val(doc.data().address)
+    })
+})
+$('#status').on('click', function () {
+  $('booking-submit').on('click', function () {
+    let transport_type = $('.booking-card active').attr(id).split('-')[0]
+    let origin, destination
+    switch (transport_type) {
+      case 'air':
+        origin = $('air-from option').filter(':selected').val()
+        destination = $('air-to option').filter(':selected').val()
+        break
+      case 'sea':
+        origin = $('sea-from option').filter(':selected').val()
+        destination = $('sea-to option').filter(':selected').val()
+        break
+      case 'land':
+        origin = $('land-from option').filter(':selected').val()
+        destination = $('land-to option').filter(':selected').val()
+        break
+      default:
+        break
+    }
+    //to do upload file
+    db.collection('status')
+      .doc(auth.currentUser.uid)
+      .update({
+        width: $('#booking_width').val(),
+        height: $('#booking_height').val(),
+        depth: $('#booking_depth').val(),
+        quantity: $('#booking_quantity').val(),
+        weight: $('#booking_weight').val(),
+        package_type: $('.booking-type active').html(),
+        transport_type,
+        origin,
+        destination,
+        eta: $('#booking_eta').val(),
+        package_list: $('#booking_package_list').prop('files'),
+        invoice: $('#booking_invoice').prop('files'),
+      })
+  })
+  db.collection('users')
+    .doc(auth.currentUser.uid)
+    .get()
+    .then(function (doc) {
+      console.log(doc.data().status)
+      switch (doc.data().status) {
+        case 'nodata':
+          $('#nodata').addClass('is-active')
+          break
+        case 'booking':
+          $('#nodata').addClass('is-complete')
+          $('#nodata').html('<span>Booking Detail</span>')
+          break
+        case 'confirm_appointment':
+          $('#nodata').addClass('is-complete')
+          break
+        case 'appointment':
+          $('#nodata').addClass('is-complete')
+          $('#appointment').addClass('is-active')
+          $('#appointment').html('<span>Appointment</span>')
+          break
+        case 'invoice':
+          $('#nodata').addClass('is-complete')
+          $('#appointment').addClass('is-complete')
+          $('#invoice').addClass('is-active')
+          break
+        case 'receipt':
+          $('#nodata').addClass('is-complete')
+          $('#appointment').addClass('is-complete')
+          $('#invoice').addClass('is-complete')
+          $('#receipt').addClass('is-active')
+          break
+        default:
+          break
+      }
+      $('#status-modal').modal('show')
+    })
 })
 $('.booking-card').on('click', function () {
   $('.booking-card').removeClass('active')
   $(this).addClass('active')
   switch ($(this).attr('id')) {
     case 'air-booking-card':
-      $('#air_booking').attr('checked', 'checked')
       $('.input-tran').addClass('hide')
       $('#air-trans').removeClass('hide')
       break
     case 'sea-booking-card':
-      $('#sea_booking').attr('checked', 'checked')
       $('.input-tran').addClass('hide')
       $('#sea-trans').removeClass('hide')
       break
     case 'land-booking-card':
-      $('#land_booking').attr('checked', 'checked')
       $('.input-tran').addClass('hide')
       $('#land-trans').removeClass('hide')
       break
@@ -129,6 +236,10 @@ $('.booking-card').on('click', function () {
 })
 $('.type-btn').on('click', function () {
   $('.type-btn').removeClass('active')
+  $(this).addClass('active')
+})
+$('.booking-type').on('click', function () {
+  $('.booking-type').removeClass('active')
   $(this).addClass('active')
 })
 $('.booking-btn').on('click', function () {

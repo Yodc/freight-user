@@ -1,4 +1,3 @@
-var db = firebase.firestore()
 db.collection('air')
   .orderBy('air_name')
   .onSnapshot(function (querySnapshot) {
