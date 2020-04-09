@@ -1,3 +1,6 @@
+var db = firebase.firestore()
+var auth = firebase.auth()
+var storage = firebase.storage()
 let ui = new firebaseui.auth.AuthUI(auth)
 var uiConfig = {
   callbacks: {
@@ -11,6 +14,7 @@ var uiConfig = {
             tel: authResult.user.phoneNumber,
             status: 'nodata',
           })
+        storage.ref().child(`users/${auth.currentUser.uid}`)
         db.collection('status').doc(authResult.user.uid).set({
           booking: null,
         })
@@ -42,11 +46,18 @@ firebase.auth().onAuthStateChanged(function (user) {
     db.collection('users')
       .doc(user.uid)
       .onSnapshot(function (doc) {
-        $('#profile-name').html(`Welcome, ${doc.data().first_name}`)
+        $('#profile-name').html(
+          `Welcome, <span class="text-primary">${doc.data().first_name}</span>`
+        )
+        $('#getQuoteNow').addClass('btn-secondary')
+        $('#getQuoteNow').removeClass('btn-primary')
+        $('#getBookingNow').removeClass('hide')
+        $('#getBookingNow').on('click',function(){
+          $('status-modal')
+        })
         $('#profile-nav').show()
+        $('#login-nav').hide()
       })
-
-    $('#login-nav').hide()
   } else {
     // No user is signed in.
     $('#profile-nav').hide()

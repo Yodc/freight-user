@@ -34,7 +34,6 @@ $('#sentform').on('click', function () {
       package_item.type = $('.type.active').attr('id')
       $('#packageform').addClass('hide')
       $('#transportform').removeClass('hide')
-      getDropdown('air')
       $('.type-card').on('click', function () {
         let transId = $(this).attr('id')
         switch (transId) {
@@ -102,6 +101,47 @@ alertMessage = (message, type) => {
   $('.alert').addClass(`alert-${type}`)
   $('.alert').addClass('show fade')
 }
+getPrice = (data) => {
+  let price
+  let vol =
+    ((parseFloat(data.width) * parseFloat(data.height) * parseFloat(data.length)) / 6000) *
+    parseFloat(data.quantity)
+  let compare = vol > parseFloat(data.weight) ? vol : parseFloat(data.weight)
+  switch (data.type) {
+    case 'air':
+      price = compare * 2.5 * 32
+      break
+    case 'sea':
+      price = vol * 25 * 32
+      break
+    case 'land':
+      if (vol < 1 || data.weight < 1000) {
+        price = 3500
+      } else if (vol < 25 || data.weight < 6000) {
+        price = 7000
+      } else if (vol < 25 || data.weight < 6000) {
+        price = 8000
+      } else {
+        price = 9000
+      }
+      break
+
+    default:
+      break
+  }
+  return price
+}
+capitalizeFirstLetter = (letter) => {
+  return letter.charAt(0).toUpperCase() + letter.slice(1)
+}
+addCard = (icon, key, value, location) => {
+  $(location).append(`
+  <div class="myCard p-3 col-md-5 m-3">
+  <div class="cardIcon"><i class="fas fa-${icon}"></i></div>
+  <div class="cardKey font-weight-bold">${key}</div>
+  <div class="cardValue text-primary">${value}</div>
+</div>`)
+}
 $('#profiles').on('click', function (e) {
   $('#signup-modal').modal('show')
   $('#changePass').html('New Password')
@@ -139,81 +179,207 @@ $('#profiles').on('click', function (e) {
     })
 })
 $('#status').on('click', function () {
-  $('booking-submit').on('click', function () {
-    let transport_type = $('.booking-card active').attr(id).split('-')[0]
+  $('#status-modal').modal('show')
+  $('.status_loading').removeClass('hide')
+  $('#booking-submit').on('click', function () {
+    let transport_type = $('.booking-card.active').attr('id').split('-')[0]
     let origin, destination
     switch (transport_type) {
       case 'air':
-        origin = $('air-from option').filter(':selected').val()
-        destination = $('air-to option').filter(':selected').val()
+        origin = $('.air-from option').filter(':selected').text()
+        destination = $('.air-to option').filter(':selected').text()
         break
       case 'sea':
-        origin = $('sea-from option').filter(':selected').val()
-        destination = $('sea-to option').filter(':selected').val()
+        origin = $('.sea-from option').filter(':selected').text()
+        destination = $('.sea-to option').filter(':selected').text()
         break
       case 'land':
-        origin = $('land-from option').filter(':selected').val()
-        destination = $('land-to option').filter(':selected').val()
+        origin = $('#ip-from').val()
+        destination = $('#ip-to').val()
         break
       default:
         break
     }
-    //to do upload file
     db.collection('status')
       .doc(auth.currentUser.uid)
       .update({
-        width: $('#booking_width').val(),
-        height: $('#booking_height').val(),
-        depth: $('#booking_depth').val(),
-        quantity: $('#booking_quantity').val(),
-        weight: $('#booking_weight').val(),
-        package_type: $('.booking-type active').html(),
-        transport_type,
-        origin,
-        destination,
-        eta: $('#booking_eta').val(),
-        package_list: $('#booking_package_list').prop('files'),
-        invoice: $('#booking_invoice').prop('files'),
+        booking: {
+          width: $('#booking_width').val(),
+          height: $('#booking_height').val(),
+          length: $('#booking_length').val(),
+          quantity: $('#booking_quantity').val(),
+          weight: $('#booking_weight').val(),
+          package_type: $('.booking-type.active').attr('value'),
+          transport_type,
+          origin,
+          destination,
+          eta: $('#booking_eta').val(),
+        },
       })
+      .then(() => {
+        alertMessage('Booking Complete', 'success')
+      })
+      .catch(function (error) {
+        alertMessage(error, 'danger')
+      })
+    db.collection('users').doc(auth.currentUser.uid).update({ status: 'booking' })
+    storage
+      .ref()
+      .child(`users/${auth.currentUser.uid}/booking/packing_list.pdf`)
+      .put($('#booking_packing_list').get(0).files[0])
+    storage
+      .ref()
+      .child(`users/${auth.currentUser.uid}/booking/invoice.pdf`)
+      .put($('#booking_invoice').get(0).files[0])
+    $('#status-modal').modal('hide')
+  })
+  $('#getBooking').on('click', function () {
+    let price = getPrice({
+      width: $('#booking_width').val(),
+      height: $('#booking_height').val(),
+      length: $('#booking_length').val(),
+      quantity: $('#booking_quantity').val(),
+      weight: $('#booking_weight').val(),
+      type: $('.booking-card.active').attr('id').split('-')[0],
+    })
+    $('#bookingPrice').html(price)
+    $('#eprice').removeClass('hide')
   })
   db.collection('users')
     .doc(auth.currentUser.uid)
     .get()
     .then(function (doc) {
-      console.log(doc.data().status)
+      $('.statusContent').addClass('hide')
       switch (doc.data().status) {
         case 'nodata':
+          $('#booking_eta').attr('min', new Date())
+          $('#statusFooter').html(
+            `<button type="button" id="getBooking" class="btn btn-primary">Booking</button>`
+          )
+          $('.status_loading').addClass('hide')
+          $('#status-card').removeClass('hide')
           $('#nodata').addClass('is-active')
+          $('#newbooking').removeClass('hide')
           break
         case 'booking':
-          $('#nodata').addClass('is-complete')
-          $('#nodata').html('<span>Booking Detail</span>')
+          db.collection('status')
+            .doc(auth.currentUser.uid)
+            .get()
+            .then(function (doc) {
+              $('.status_loading').addClass('hide')
+              $('#status-card').removeClass('hide')
+              let data = doc.data().booking
+              $('#nodata').addClass('is-active')
+              $('#nodata').html('<span>Booking Detail</span>')
+              $('#bookingDetail').removeClass('hide')
+              $('.bookingContainer').empty()
+              addCard(
+                'cube',
+                `Width Height Length`,
+                `${data.width} x ${data.height} x ${data.length} cm`,
+                '.bookingContainer'
+              )
+              addCard(
+                'boxes',
+                `Quantity`,
+                `${data.quantity} ${capitalizeFirstLetter(data.package_type)}`,
+                '.bookingContainer'
+              )
+              addCard('weight', `Weight`, `${data.weight} kgs`, '.bookingContainer')
+              addCard(
+                'road',
+                `Transport Type`,
+                `${capitalizeFirstLetter(data.package_type)}`,
+                '.bookingContainer'
+              )
+              addCard(
+                'plane-departure',
+                `Origin - Destination`,
+                `${data.origin} - ${data.destination}`,
+                '.bookingContainer'
+              )
+              addCard('calendar-alt', `Estimate Time Arrive`, `${data.eta}`, '.bookingContainer')
+              addCard(
+                'file-archive',
+                `Packing List`,
+                `<a type="button" role="button" download href="${storage.refFromURL(
+                  `gs://bucket/users/${auth.currentUser.uid}/booking/packing_list.pdf`
+                )}" class="btn btn-primary btn-block">Download</a>`,
+                '.bookingContainer'
+              )
+              addCard(
+                'file-invoice',
+                `Invoice`,
+                `<a type="button" role="button" download href="${storage.refFromURL(
+                  `gs://bucket/users/${auth.currentUser.uid}/booking/invoice.pdf`
+                )}" class="btn btn-primary btn-block">Download</a>`,
+                '.bookingContainer'
+              )
+            })
+
           break
         case 'confirm_appointment':
           $('#nodata').addClass('is-complete')
+          $('#appointment').addClass('is-active')
+          $('#confirmAppointment').removeClass('hide')
+          db.collection('status')
+            .doc(auth.currentUser.uid)
+            .get()
+            .then(function (doc) {
+              $('.status_loading').addClass('hide')
+              $('#status-card').removeClass('hide')
+              let data = doc.data().appoointment
+              let booking = doc.data().booking
+              $('#nodata').addClass('is-complete')
+              $('#appointment').addClass('is-active')
+              $('#confirmAppointment').removeClass('hide')
+              switch (data.type) {
+                case 'air':
+                  addCard(
+                    'file-hashtag',
+                    `Booking Id`,
+                    `${data.booking_no}`,
+                    '.conAppointmentContainer'
+                  )
+
+                  break
+                case 'sea':
+                  break
+                case 'land':
+                  break
+                default:
+                  break
+              }
+            })
           break
         case 'appointment':
           $('#nodata').addClass('is-complete')
           $('#appointment').addClass('is-active')
           $('#appointment').html('<span>Appointment</span>')
+          $('#appointmentDetail').removeClass('hide')
+
           break
         case 'invoice':
           $('#nodata').addClass('is-complete')
           $('#appointment').addClass('is-complete')
           $('#invoice').addClass('is-active')
+          $('#receiptData').removeClass('hide')
+
           break
         case 'receipt':
           $('#nodata').addClass('is-complete')
           $('#appointment').addClass('is-complete')
           $('#invoice').addClass('is-complete')
           $('#receipt').addClass('is-active')
+          $('#newbooking').removeClass('hide')
+
           break
         default:
           break
       }
-      $('#status-modal').modal('show')
     })
 })
+
 $('.booking-card').on('click', function () {
   $('.booking-card').removeClass('active')
   $(this).addClass('active')
@@ -234,6 +400,7 @@ $('.booking-card').on('click', function () {
       break
   }
 })
+
 $('.type-btn').on('click', function () {
   $('.type-btn').removeClass('active')
   $(this).addClass('active')
