@@ -186,7 +186,7 @@
             <div class="form-head mb-2">Create New Booking</div>
             <div class="input-group form-group col-md-12">
               <div class="input-group-prepend">
-                <label class="input-group-text" id="basic-addon1">Width Height Length(cm)</label>
+                <label class="input-group-text" id="basic-addon1">Dimention</label>
               </div>
               <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="booking_width">
               <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="booking_height">
@@ -325,14 +325,15 @@
 
           <div class="statusContent hide" id="invoiceData">
             <div class="form-head mb-2">Invoice</div>
-            <div id="invoiceContainer">
+            <div id="invoiceContainer" class="d-flex justify-content-center">
 
+              <img class="mb-3 col-4" src="./img/undraw_printing_invoices_5r4r.svg">
             </div>
           </div>
           <div class="statusContent hide" id="receiptData">
-            <div class="form-head mb-2">Receipt</div>
-            <div id="receiptContainer">
-
+            <div class="form-head mb-2 d-flex justify-content-center">Receipt</div>
+            <div id="receiptContainer" class="d-flex justify-content-center">
+              <img class="mb-3 col-4" src="./img/undraw_payments_21w6.svg">
             </div>
           </div>
         </div>
@@ -360,10 +361,12 @@
 
           <!-- Masthead Subheading -->
           <p class="masthead-subheading font-weight-light mb-0">Find your forwarder partner now</p>
-          <a type="button" href="#quote" role="button" id="getQuoteNow"
-            class="btn btn-primary nav-link js-scroll-trigger">Get Quote
-            Now</a>
-          <a type="button" role="button" id="bookingNow" class="btn btn-primary nav-link hide">Booking Now</a>
+          <div class="d-flex">
+            <a type="button" href="#quote" role="button" id="getQuoteNow"
+              class="btn btn-primary nav-link js-scroll-trigger mx-2">Get Quote
+              Now</a>
+            <a type="button" role="button" id="getBookingNow" class="btn btn-primary nav-link hide mx-2">Booking Now</a>
+          </div>
         </div>
         <div class="container col-md-6 d-flex align-items-center flex-column">
           <!-- Masthead Avatar Image -->
@@ -563,11 +566,11 @@
               <div class="form-head mb-2">Enter Your Package Detail</div>
               <div class="input-group form-group col-md-12">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" id="basic-addon1">Width Height Depth(cm)</label>
+                  <label class="input-group-text" id="basic-addon1">Dimention</label>
                 </div>
                 <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="width">
                 <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="height">
-                <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="depth">
+                <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="length">
 
               </div>
               <div class="form-row mx-2">
@@ -578,15 +581,6 @@
                 <div class="form-group col-md-3">
                   <label for="quantity">Weight</label>
                   <input type="text" class="form-control" id="weight">
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="to" class="d-block">Type</label>
-                  <div class="btn-group " role="group" aria-label="Basic example">
-                    <button type="button" id="type-box" class="btn type-btn btn-secondary active">Box</button>
-                    <button type="button" id="type-carton" class="btn type-btn btn-secondary">Carton</button>
-                    <button type="button" id="type-pallet" class="btn type-btn btn-secondary">Pallet</button>
-                    <button type="button" id="type-wooden" class="btn type-btn btn-secondary">Wooden case</button>
-                  </div>
                 </div>
               </div>
             </form>
@@ -624,13 +618,6 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-10 mb-3 hide" id='land-fixed'>
-                <label for="from" class="col-form-label">Available destination</label>
-                <select class="form-control" id="land-form">
-                </select>
-              </div>
-
-
             </form>
             <div id="quoteform" class="quote-form hide">
               <div class="form-head">Your Estimate Price is</div>

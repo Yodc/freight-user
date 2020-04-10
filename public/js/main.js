@@ -1,100 +1,3 @@
-$('#sentform').on('click', function () {
-  let step = $('.step.is-active').attr('id')
-  switch (step) {
-    case 'package-step':
-      $('#package-step').attr('class', 'is-complete step')
-      $('#transport-step').attr('class', 'is-active step')
-      $('#package-step').on('click', function () {
-        $('#transport-step').attr('class', 'step')
-        $('#package-step').attr('class', 'is-active step')
-        $('.quote-form').addClass('hide')
-        $('#packageform').removeClass('hide')
-        $('#transport-step').on('click', function () {
-          $('#package-step').attr('class', 'is-complete step')
-          $('#transport-step').attr('class', 'is-active step')
-          $('#packageform').addClass('hide')
-          $('#transportform').removeClass('hide')
-        })
-      })
-      let package_item = {
-        width: '',
-        height: '',
-        depth: '',
-        weight: '',
-        quantity: '',
-        type: '',
-        item_name: '',
-      }
-      package_item.width = $('#width').val()
-      package_item.height = $('#height').val()
-      package_item.depth = $('#depth').val()
-      package_item.weight = $('#weight').val()
-      package_item.quantity = $('#quantity').val()
-      package_item.item_name = $('#item-name').val()
-      package_item.type = $('.type.active').attr('id')
-      $('#packageform').addClass('hide')
-      $('#transportform').removeClass('hide')
-      $('.type-card').on('click', function () {
-        let transId = $(this).attr('id')
-        switch (transId) {
-          case 'air-type -card':
-            $('.type-card').removeClass('active')
-            $('#air-type-card').addClass('active')
-            $('.form-trans').removeAttr('checked')
-            $('#air_type').attr('checked', 'checked')
-            $('#land-fixed').addClass('hide')
-            break
-          case 'sea-type-card':
-            $('.type-card').removeClass('active')
-            $('#sea-type-card').addClass('active')
-            $('.form-trans').removeAttr('checked')
-            $('#sea_type').attr('checked', 'checked')
-            $('#land-fixed').addClass('hide')
-            break
-          case 'land-type-card':
-            $('.type-card').removeClass('active')
-            $('#land-type-card').addClass('active')
-            $('.form-trans').removeAttr('checked')
-            $('#land_type').attr('checked', 'checked')
-            $('#land-fixed').removeClass('hide')
-            break
-          default:
-            break
-        }
-      })
-      break
-    case 'transport-step':
-      $('#transport-step').attr('class', 'is-complete step')
-      $('#quote-step').attr('class', 'is-active step')
-      $('#package-step').on('click', function () {
-        $('#transport-step').attr('class', ' step')
-        $('#quote-step').attr('class', ' step')
-        $('#package-step').attr('class', 'is-active step')
-        $('.quote-form').addClass('hide')
-        $('#packageform').removeClass('hide')
-        $('#sentformcontainer').removeClass('hide')
-      })
-      $('#transport-step').on('click', function () {
-        $('#sentformcontainer').removeClass('hide')
-        $('#quote-step').attr('class', 'step')
-        $('#transport-step').attr('class', 'is-active step')
-        $('.quote-form').addClass('hide')
-        $('#transportform').removeClass('hide')
-        $('#quote-step').on('click', function () {
-          $('#transport-step').attr('class', 'is-complete step')
-          $('#quote-step').attr('class', 'is-active step')
-          $('#sentformcontainer').addClass('hide')
-          $('#transportform').addClass('hide')
-          $('#quoteform').removeClass('hide')
-        })
-      })
-      $('#sentformcontainer').addClass('hide')
-      $('#transportform').addClass('hide')
-      $('#quoteform').removeClass('hide')
-    default:
-      break
-  }
-})
 alertMessage = (message, type) => {
   $('#alert_text').html(message)
   $('.alert').removeClass('alert-success alert-danger alert-warning hide')
@@ -109,10 +12,10 @@ getPrice = (data) => {
   let compare = vol > parseFloat(data.weight) ? vol : parseFloat(data.weight)
   switch (data.type) {
     case 'air':
-      price = compare * 2.5 * 32
+      price = Math.round(compare * 2.5 * 32)
       break
     case 'sea':
-      price = vol * 25 * 32
+      price = Math.round(vol * 25 * 32)
       break
     case 'land':
       if (vol < 1 || data.weight < 1000) {
@@ -142,43 +45,7 @@ addCard = (icon, key, value, location) => {
   <div class="cardValue text-primary">${value}</div>
 </div>`)
 }
-$('#profiles').on('click', function (e) {
-  $('#signup-modal').modal('show')
-  $('#changePass').html('New Password')
-  $('#signup-title').html('Update Profile')
-  $('.notProfile').remove()
-  $('#signup-submit').html('Update Profile')
-  $('#signup-submit').on('click', function () {
-    e.preventDefault()
-    db.collection('users')
-      .doc(auth.currentUser.uid)
-      .update({
-        first_name: $('#signup-first_name').val(),
-        last_name: $('#signup-last_name').val(),
-        company_name: $('#signup-company').val(),
-        tel: $('#signup-tel').val(),
-        address: $('#signup-address').val(),
-      })
-      .then(function () {
-        alertMessage('Update Profile Complete', 'success')
-      })
-      .catch(function (error) {
-        alertMessage(error, 'danger')
-      })
-    $('#signup-modal').modal('hide')
-  })
-  db.collection('users')
-    .doc(auth.currentUser.uid)
-    .get()
-    .then(function (doc) {
-      $('#signup-company').val(doc.data().company_name)
-      $('#signup-first_name').val(doc.data().first_name)
-      $('#signup-last_name').val(doc.data().last_name)
-      $('#signup-tel').val(doc.data().tel)
-      $('#signup-address').val(doc.data().address)
-    })
-})
-$('#status').on('click', function () {
+getStatus = () => {
   $('#status-modal').modal('show')
   $('.status_loading').removeClass('hide')
   $('#booking-submit').on('click', function () {
@@ -520,7 +387,7 @@ $('#status').on('click', function () {
               $('#invoiceData').removeClass('hide')
               console.log(url)
               $('#invoiceContainer').append(
-                `<a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary btn-block">get Invoice</a>`
+                `<div class="col-12"><a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary">get Invoice</a></div>`
               )
             })
           break
@@ -537,9 +404,8 @@ $('#status').on('click', function () {
               $('#invoice').addClass('is-complete')
               $('#receipt').addClass('is-active')
               $('#receiptData').removeClass('hide')
-              console.log(url)
               $('#receiptContainer').append(
-                `<a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary btn-block">Get Receipt</a>`
+                `<div class="col-12"><a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary">Get Receipt</a></div>`
               )
             })
           break
@@ -547,8 +413,140 @@ $('#status').on('click', function () {
           break
       }
     })
+}
+$('#sentform').on('click', function () {
+  let step = $('.step.is-active').attr('id')
+  switch (step) {
+    case 'package-step':
+      $('#package-step').attr('class', 'is-complete step')
+      $('#transport-step').attr('class', 'is-active step')
+      $('#package-step').on('click', function () {
+        $('#transport-step').attr('class', 'step')
+        $('#package-step').attr('class', 'is-active step')
+        $('.quote-form').addClass('hide')
+        $('#packageform').removeClass('hide')
+        $('#transport-step').on('click', function () {
+          $('#package-step').attr('class', 'is-complete step')
+          $('#transport-step').attr('class', 'is-active step')
+          $('#packageform').addClass('hide')
+          $('#transportform').removeClass('hide')
+        })
+      })
+      $('#packageform').addClass('hide')
+      $('#transportform').removeClass('hide')
+      $('.type-card').on('click', function () {
+        let transId = $(this).attr('id')
+        switch (transId) {
+          case 'air-type-card':
+            $('.type-card').removeClass('active')
+            $('#air-type-card').addClass('active')
+            $('.form-trans').removeAttr('checked')
+            $('#air_type').attr('checked', 'checked')
+            break
+          case 'sea-type-card':
+            $('.type-card').removeClass('active')
+            $('#sea-type-card').addClass('active')
+            $('.form-trans').removeAttr('checked')
+            $('#sea_type').attr('checked', 'checked')
+            break
+          case 'land-type-card':
+            $('.type-card').removeClass('active')
+            $('#land-type-card').addClass('active')
+            $('.form-trans').removeAttr('checked')
+            $('#land_type').attr('checked', 'checked')
+            break
+          default:
+            break
+        }
+      })
+      break
+    case 'transport-step':
+      $('#quoteprice').html(
+        getPrice({
+          width: $('#width').val(),
+          height: $('#height').val(),
+          length: $('#length').val(),
+          quantity: $('#quantity').val(),
+          weight: $('#weight').val(),
+          type: $('.type-card.active').attr('id').split('-')[0],
+        })
+      )
+      $('#transport-step').attr('class', 'is-complete step')
+      $('#quote-step').attr('class', 'is-active step')
+      $('#package-step').on('click', function () {
+        $('#transport-step').attr('class', ' step')
+        $('#quote-step').attr('class', ' step')
+        $('#package-step').attr('class', 'is-active step')
+        $('.quote-form').addClass('hide')
+        $('#packageform').removeClass('hide')
+        $('#sentformcontainer').removeClass('hide')
+      })
+      $('#transport-step').on('click', function () {
+        $('#sentformcontainer').removeClass('hide')
+        $('#quote-step').attr('class', 'step')
+        $('#transport-step').attr('class', 'is-active step')
+        $('.quote-form').addClass('hide')
+        $('#transportform').removeClass('hide')
+        $('#quote-step').on('click', function () {
+          $('#transport-step').attr('class', 'is-complete step')
+          $('#quote-step').attr('class', 'is-active step')
+          $('#sentformcontainer').addClass('hide')
+          $('#transportform').addClass('hide')
+          $('#quoteform').removeClass('hide')
+        })
+      })
+      $('#sentformcontainer').addClass('hide')
+      $('#transportform').addClass('hide')
+      $('#quoteform').removeClass('hide')
+      $('#booking').on('click', function () {
+        getStatus()
+      })
+    default:
+      break
+  }
 })
-
+$('#getBookingNow').on('click', function () {
+  getStatus()
+})
+$('#profiles').on('click', function (e) {
+  $('#signup-modal').modal('show')
+  $('#changePass').html('New Password')
+  $('#signup-title').html('Update Profile')
+  $('.notProfile').remove()
+  $('#signup-submit').html('Update Profile')
+  $('#signup-submit').on('click', function () {
+    e.preventDefault()
+    db.collection('users')
+      .doc(auth.currentUser.uid)
+      .update({
+        first_name: $('#signup-first_name').val(),
+        last_name: $('#signup-last_name').val(),
+        company_name: $('#signup-company').val(),
+        tel: $('#signup-tel').val(),
+        address: $('#signup-address').val(),
+      })
+      .then(function () {
+        alertMessage('Update Profile Complete', 'success')
+      })
+      .catch(function (error) {
+        alertMessage(error, 'danger')
+      })
+    $('#signup-modal').modal('hide')
+  })
+  db.collection('users')
+    .doc(auth.currentUser.uid)
+    .get()
+    .then(function (doc) {
+      $('#signup-company').val(doc.data().company_name)
+      $('#signup-first_name').val(doc.data().first_name)
+      $('#signup-last_name').val(doc.data().last_name)
+      $('#signup-tel').val(doc.data().tel)
+      $('#signup-address').val(doc.data().address)
+    })
+})
+$('#status').on('click', function () {
+  getStatus()
+})
 $('.booking-card').on('click', function () {
   $('.booking-card').removeClass('active')
   $(this).addClass('active')

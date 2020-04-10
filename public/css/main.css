@@ -88,6 +88,9 @@
 #profile-item {
   z-index: 1031;
 }
+.status-img {
+  min-width: 33.3333%;
+}
 .link {
   cursor: pointer;
   user-select: none;

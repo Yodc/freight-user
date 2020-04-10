@@ -52,9 +52,6 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#getQuoteNow').addClass('btn-secondary')
         $('#getQuoteNow').removeClass('btn-primary')
         $('#getBookingNow').removeClass('hide')
-        $('#getBookingNow').on('click',function(){
-          $('status-modal')
-        })
         $('#profile-nav').show()
         $('#login-nav').hide()
       })
