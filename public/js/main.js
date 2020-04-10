@@ -275,7 +275,7 @@ $('#status').on('click', function () {
               $('.bookingContainer').empty()
               addCard(
                 'cube',
-                `Width Height Length`,
+                `Dimention`,
                 `${data.width} x ${data.height} x ${data.length} cm`,
                 '.bookingContainer'
               )
@@ -293,35 +293,41 @@ $('#status').on('click', function () {
                 '.bookingContainer'
               )
               addCard(
-                'plane-departure',
+                'telegram-plane',
                 `Origin - Destination`,
                 `${data.origin} - ${data.destination}`,
                 '.bookingContainer'
               )
               addCard('calendar-alt', `Estimate Time Arrive`, `${data.eta}`, '.bookingContainer')
-              addCard(
-                'file-archive',
-                `Packing List`,
-                `<a type="button" role="button" download href="${storage.refFromURL(
-                  `gs://bucket/users/${auth.currentUser.uid}/booking/packing_list.pdf`
-                )}" class="btn btn-primary btn-block">Download</a>`,
-                '.bookingContainer'
-              )
-              addCard(
-                'file-invoice',
-                `Invoice`,
-                `<a type="button" role="button" download href="${storage.refFromURL(
-                  `gs://bucket/users/${auth.currentUser.uid}/booking/invoice.pdf`
-                )}" class="btn btn-primary btn-block">Download</a>`,
-                '.bookingContainer'
-              )
+              storage
+                .ref()
+                .child(`users/${auth.currentUser.uid}/booking/packing_list.pdf`)
+                .getDownloadURL((url) => {
+                  addCard(
+                    'file-archive',
+                    `Packing List`,
+                    `<a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary btn-block">Download</a>`,
+                    '.bookingContainer'
+                  )
+                })
+              storage
+                .ref()
+                .child(`users/${auth.currentUser.uid}/booking/invoice.pdf`)
+                .getDownloadURL((url) => {
+                  addCard(
+                    'file-invoice',
+                    `Invoice`,
+                    `<a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary btn-block">Download</a>`,
+                    '.bookingContainer'
+                  )
+                })
             })
 
           break
-        case 'confirm_appointment':
+        case 'appointment':
           $('#nodata').addClass('is-complete')
           $('#appointment').addClass('is-active')
-          $('#confirmAppointment').removeClass('hide')
+          $('#appointmentDetail').removeClass('hide')
           db.collection('status')
             .doc(auth.currentUser.uid)
             .get()
@@ -333,46 +339,209 @@ $('#status').on('click', function () {
               $('#nodata').addClass('is-complete')
               $('#appointment').addClass('is-active')
               $('#confirmAppointment').removeClass('hide')
-              switch (data.type) {
+              switch (booking.transport_type) {
                 case 'air':
+                  addCard('hashtag', `Booking Id`, `${data.booking_no}`, '.appointmentContainer')
                   addCard(
-                    'file-hashtag',
-                    `Booking Id`,
-                    `${data.booking_no}`,
-                    '.conAppointmentContainer'
+                    'building',
+                    `Company Name`,
+                    `${data.company_name}`,
+                    '.appointmentContainer'
                   )
-
+                  addCard(
+                    'telegram-plane',
+                    `Origin - Destination`,
+                    `${booking.origin} - ${booking.destination}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'calendar-check',
+                    `ETD - ETA`,
+                    `${data.etd} - ${data.eta}`,
+                    '.appointmentContainer'
+                  )
+                  addCard('plane', `Fleight No`, `${data.flight_no}`, '.appointmentContainer')
+                  addCard(
+                    'cube',
+                    `Volume`,
+                    `${(booking.width * booking.height * booking.length) / 6000} CBM`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'boxes',
+                    `Quantity`,
+                    `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+                    '.appointmentContainer'
+                  )
+                  addCard('weight', `Weight`, `${data.weight} kgs`, '.appointmentContainer')
+                  addCard(
+                    'plane-departure',
+                    `Loading At`,
+                    `${data.loading_at}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'carlendar-all',
+                    `Loading date`,
+                    `${data.loading_date}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'user-tie',
+                    `Contact`,
+                    `${data.contact_name} - ${data.contact_tel}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'id-card',
+                    `Contact`,
+                    `${data.transporter_name} - ${data.transporter_tel}`,
+                    '.appointmentContainer'
+                  )
                   break
                 case 'sea':
+                  addCard(
+                    'building',
+                    `Company Name`,
+                    `${data.company_name}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'telegram-plane',
+                    `Origin - Destination`,
+                    `${booking.origin} - ${booking.destination}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'calendar-check',
+                    `ETD - ETA`,
+                    `${data.etd} - ${data.eta}`,
+                    '.appointmentContainer'
+                  )
+                  addCard('ship', `Vessel Name`, `${data.vessel_name}`, '.appointmentContainer')
+                  addCard(
+                    'cube',
+                    `Volume`,
+                    `${(booking.width * booking.height * booking.length) / 1000000} CBM`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'boxes',
+                    `Quantity`,
+                    `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+                    '.appointmentContainer'
+                  )
+                  addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
+                  addCard(
+                    'plane-departure',
+                    `Loading At`,
+                    `${data.loading_at}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'carlendar-all',
+                    `Loading date`,
+                    `${data.loading_date}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'user-tie',
+                    `Contact`,
+                    `${data.contact_name} - ${data.contact_tel}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'id-card',
+                    `Contact`,
+                    `${data.transporter_name} - ${data.transporter_tel}`,
+                    '.appointmentContainer'
+                  )
                   break
                 case 'land':
+                  addCard(
+                    'telegram-plane',
+                    `Origin - Destination`,
+                    `${booking.origin} - ${booking.destination}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'calendar-check',
+                    `ETD - ETA`,
+                    `${data.etd} - ${data.eta}`,
+                    '.appointmentContainer'
+                  )
+                  addCard('car', `Car Register`, `${data.car_register}`, '.appointmentContainer')
+                  addCard('hashtag', `Car Cassis`, `${data.car_cassis}`, '.appointmentContainer')
+                  addCard('cogs', `Car Engine`, `${data.car_engine}`, '.appointmentContainer')
+                  addCard('truck', `Car Type`, `${data.car_type}`, '.appointmentContainer')
+                  addCard(
+                    'car-crash',
+                    `Car Insurance`,
+                    `${data.car_insurance}`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'cube',
+                    `Volume`,
+                    `${(booking.width * booking.height * booking.length) / 1000000} CBM`,
+                    '.appointmentContainer'
+                  )
+                  addCard(
+                    'boxes',
+                    `Quantity`,
+                    `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+                    '.appointmentContainer'
+                  )
+                  addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
+                  addCard(
+                    'user',
+                    `Driver`,
+                    `${data.car_driver} - ${data.car_tel}`,
+                    '.appointmentContainer'
+                  )
+
                   break
                 default:
                   break
               }
             })
           break
-        case 'appointment':
-          $('#nodata').addClass('is-complete')
-          $('#appointment').addClass('is-active')
-          $('#appointment').html('<span>Appointment</span>')
-          $('#appointmentDetail').removeClass('hide')
-
-          break
         case 'invoice':
-          $('#nodata').addClass('is-complete')
-          $('#appointment').addClass('is-complete')
-          $('#invoice').addClass('is-active')
-          $('#receiptData').removeClass('hide')
-
+          storage
+            .ref()
+            .child(`users/${auth.currentUser.uid}/booking/invoice.pdf`)
+            .getDownloadURL()
+            .then((url) => {
+              $('.status_loading').addClass('hide')
+              $('#status-card').removeClass('hide')
+              $('#nodata').addClass('is-complete')
+              $('#appointment').addClass('is-complete')
+              $('#invoice').addClass('is-active')
+              $('#invoiceData').removeClass('hide')
+              console.log(url)
+              $('#invoiceContainer').append(
+                `<a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary btn-block">get Invoice</a>`
+              )
+            })
           break
         case 'receipt':
-          $('#nodata').addClass('is-complete')
-          $('#appointment').addClass('is-complete')
-          $('#invoice').addClass('is-complete')
-          $('#receipt').addClass('is-active')
-          $('#newbooking').removeClass('hide')
-
+          storage
+            .ref()
+            .child(`users/${auth.currentUser.uid}/booking/invoice.pdf`)
+            .getDownloadURL()
+            .then((url) => {
+              $('.status_loading').addClass('hide')
+              $('#status-card').removeClass('hide')
+              $('#nodata').addClass('is-complete')
+              $('#appointment').addClass('is-complete')
+              $('#invoice').addClass('is-complete')
+              $('#receipt').addClass('is-active')
+              $('#receiptData').removeClass('hide')
+              console.log(url)
+              $('#receiptContainer').append(
+                `<a type="button" role="button" download href="${url}" target="_blank" class="btn btn-primary btn-block">Get Receipt</a>`
+              )
+            })
           break
         default:
           break

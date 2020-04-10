@@ -161,7 +161,7 @@
           <div id='status-card' class="mb-3 mx-3 hide">
             <ol class="step-bar">
               <li id="nodata"><span>Booking</span></li>
-              <li id="appointment"><span>Confirm Appointment</span></li>
+              <li id="appointment"><span>Appointment</span></li>
               <li id="invoice"><span>Invoice</span></li>
               <li id="receipt"><span>Receipt</span></li>
             </ol>
@@ -191,7 +191,6 @@
               <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="booking_width">
               <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="booking_height">
               <input type="text" class="form-control" placeholder="Length" aria-label="Length" id="booking_length">
-
             </div>
             <div class="form-row mx-2">
               <div class="form-group col-md-3">
@@ -278,13 +277,6 @@
                 <label for="exampleFormControlSelect1">Destination</label>
                 <textarea type="text" rows="3" class="form-control" id="ip-to"></textarea>
               </div>
-              <!-- <div class="form-group col-md-12">
-                <label for="exampleFormControlFile1">Estimate Distance</label>
-                <input type="date" class="form-control" id="land_distance">
-                <small class="form-text text-muted">
-                  optional: type this box to get Estimate price
-                </small>
-              </div> -->
             </div>
             <div class="form-group mx-2">
               <label for="exampleFormControlFile1">Estimate Time Arrive</label>
@@ -298,7 +290,6 @@
               <label for="exampleFormControlFile1">Invoice</label>
               <input type="file" class="form-control-file" id="booking_invoice" accept=".pdf">
             </div>
-            <button type="button" id="booking-submit" class="btn btn-primary">Booking</button>
           </form>
           <div id="eprice" class="hide">
             <div class="form-head">Your Estimate Price is</div>
@@ -323,442 +314,446 @@
             </div>
 
           </div>
-          <div class="statusContent hide" id="confirmAppointment">
-            <div class="form-head mb-2">Confirm Appointment</div>
+          <div class="statusContent hide" id="appointmentDetail">
+            <div class="form-head mb-2">Appointment</div>
             <div class="container">
-              <div class="row conAppointmentContainer">
+              <div class="row appointmentContainer">
 
               </div>
             </div>
-            <div class="statusContent hide" id="appointmentDetail">
+          </div>
 
-            </div>
-            <div class="statusContent hide" id="invoiceData">
-
-            </div>
-            <div class="statusContent hide" id="receiptData">
+          <div class="statusContent hide" id="invoiceData">
+            <div class="form-head mb-2">Invoice</div>
+            <div id="invoiceContainer">
 
             </div>
           </div>
-          <div class="modal-footer p-1">
-            <div class="d-flex justify-content-end" id="statusFooter">
+          <div class="statusContent hide" id="receiptData">
+            <div class="form-head mb-2">Receipt</div>
+            <div id="receiptContainer">
 
             </div>
+          </div>
+        </div>
+        <div class="modal-footer p-1">
+          <div class="d-flex justify-content-end" id="statusFooter">
+
           </div>
         </div>
       </div>
     </div>
-    <div class="alert alert-dismissible hide myAlert mx-3 mt-3 w-75" role="alert">
-      <div id="alert_text"></div>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+  </div>
+  <div class="alert alert-dismissible hide myAlert mx-3 mt-3 w-75" role="alert">
+    <div id="alert_text"></div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- Masthead -->
+  <header class="masthead bg-light text-secondary text-center">
+    <div class="container">
+      <div class="row">
+        <div class="container col-md-6 d-flex align-items-center justify-content-between flex-column">
+          <!-- Masthead Heading -->
+          <h1 class="masthead-heading mb-0">JN Success</h1>
+
+          <!-- Masthead Subheading -->
+          <p class="masthead-subheading font-weight-light mb-0">Find your forwarder partner now</p>
+          <a type="button" href="#quote" role="button" id="getQuoteNow"
+            class="btn btn-primary nav-link js-scroll-trigger">Get Quote
+            Now</a>
+          <a type="button" role="button" id="bookingNow" class="btn btn-primary nav-link hide">Booking Now</a>
+        </div>
+        <div class="container col-md-6 d-flex align-items-center flex-column">
+          <!-- Masthead Avatar Image -->
+          <img class="masthead-avatar mb-5" src="./img/undraw_aircraft_fbvl.svg" alt="">
+        </div>
+      </div>
+
     </div>
-    <!-- Masthead -->
-    <header class="masthead bg-light text-secondary text-center">
-      <div class="container">
-        <div class="row">
-          <div class="container col-md-6 d-flex align-items-center justify-content-between flex-column">
-            <!-- Masthead Heading -->
-            <h1 class="masthead-heading mb-0">JN Success</h1>
 
-            <!-- Masthead Subheading -->
-            <p class="masthead-subheading font-weight-light mb-0">Find your forwarder partner now</p>
-            <a type="button" href="#quote" role="button" id="getQuoteNow"
-              class="btn btn-primary nav-link js-scroll-trigger">Get Quote
-              Now</a>
-            <a type="button" role="button" id="bookingNow" class="btn btn-primary nav-link hide">Booking Now</a>
-          </div>
-          <div class="container col-md-6 d-flex align-items-center flex-column">
-            <!-- Masthead Avatar Image -->
-            <img class="masthead-avatar mb-5" src="./img/undraw_aircraft_fbvl.svg" alt="">
-          </div>
-        </div>
+  </header>
 
+  <!-- Service Section -->
+  <section class="page-section bg-light" id="service">
+    <div class="container">
+      <!-- Service Section Heading -->
+      <div class="row justify-content-md-center mb-3">
+        <h2 class="page-section-heading text-center text-secondary mb-3">Service</h2>
       </div>
+      <!-- Service Grid Items -->
+      <div class="row justify-content-md-between">
+        <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-first"
+          src="./img/undraw_logistics_x4dc.svg">
+        <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-last">
+          <p class="lead text-primary">Procurement Logistic</p>
+          <ul>
+            <li class='service-list'>
+              Controlling the feed of goods in accordance with production and requirements
+            </li>
+            <li class='service-list'>
+              Service mind and customer service for customer approach
+            </li>
+            <li class='service-list'>
+              Operational procedure and ability to customize processes in accordance with customer's requirement
+            </li>
+            <li class='service-list'>
+              Work planning, problem solving and decision making
+            </li>
+            <li class='service-list'>
+              Logistics and Transportation consultancy
+            </li>
+            <li class='service-list'>
+              Safety driving by basic daily truck maintenance
+            </li>
+          </ul>
 
-    </header>
-
-    <!-- Service Section -->
-    <section class="page-section bg-light" id="service">
-      <div class="container">
-        <!-- Service Section Heading -->
-        <div class="row justify-content-md-center mb-3">
-          <h2 class="page-section-heading text-center text-secondary mb-3">Service</h2>
-        </div>
-        <!-- Service Grid Items -->
-        <div class="row justify-content-md-between">
-          <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-first"
-            src="./img/undraw_logistics_x4dc.svg">
-          <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-last">
-            <p class="lead text-primary">Procurement Logistic</p>
-            <ul>
-              <li class='service-list'>
-                Controlling the feed of goods in accordance with production and requirements
-              </li>
-              <li class='service-list'>
-                Service mind and customer service for customer approach
-              </li>
-              <li class='service-list'>
-                Operational procedure and ability to customize processes in accordance with customer's requirement
-              </li>
-              <li class='service-list'>
-                Work planning, problem solving and decision making
-              </li>
-              <li class='service-list'>
-                Logistics and Transportation consultancy
-              </li>
-              <li class='service-list'>
-                Safety driving by basic daily truck maintenance
-              </li>
-            </ul>
-
-          </div>
-        </div>
-        <div class="row justify-content-md-between">
-          <div class="service-text col-xl-6 col-md-12 order-sm-last  order-xl-first">
-            <p class="lead text-primary">Customs Clearance</p>
-            <ul>
-              <li class='service-list'>
-                Import and Export customs clearance services
-              </li>
-              <li class='service-list'>
-                Duty and Tax assessment
-              </li>
-              <li class='service-list'>
-                International trade / Documentation
-              </li>
-              <li class='service-list'>
-                Customs consultancy service
-              </li>
-              <li class='service-list'>
-                Manifests and declarations
-              </li>
-              <li class='service-list'>
-                Electronic data interchange with Customs
-              </li>
-              <li class='service-list'>
-                Document processing, Tax refund and exemption
-              </li>
-            </ul>
-
-          </div>
-          <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-last"
-            src="./img/undraw_fill_forms_yltj.svg">
-        </div>
-        <div class="row justify-content-md-between">
-          <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-first"
-            src="./img/undraw_aircraft_fbvl.svg">
-          <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-last">
-            <p class="lead text-primary">Air Freight</p>
-            <ul>
-              <li class='service-list'>
-                Worldwide air cargo services
-              </li>
-              <li class='service-list'>
-                Individual consignments and express services
-              </li>
-              <li class='service-list'>
-                Global consolidated transport
-                network
-              </li>
-              <li class='service-list'>
-                Complete aircraft chartering
-              </li>
-              <li class='service-list'>
-                Custom Brokerage
-              </li>
-
-            </ul>
-
-          </div>
-        </div>
-        <div class="row justify-content-md-between">
-          <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-first">
-            <p class="lead text-primary">Sea Freight</p>
-            <ul>
-              <li class='service-list'>
-                Trained and certified personnel which includes an "Emergency Response
-              </li>
-              <li class='service-list'>
-                Import and Export
-              </li>
-              <li class='service-list'>
-                LCL
-                consolidation & FCL
-              </li>
-              <li class='service-list'>
-                Stuffing and un-stuffing
-              </li>
-              <li class='service-list'>
-                Combined sea / air services
-              </li>
-              <li class='service-list'>
-                Custom Brokerage
-              </li>
-              <li class='service-list'>
-                Inter-modal transport
-              </li>
-              <li class='service-list'>
-                Transshipment hub
-              </li>
-              <li class='service-list'>
-                Packing and Fumigation
-              </li>
-              <li class='service-list'>
-                Project cargo
-              </li>
-              <li class='service-list'>
-                Flat Rack and special equipment
-              </li>
-            </ul>
-
-          </div>
-          <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-last"
-            src="./img/undraw_Yacht_8g6r.svg">
-        </div>
-        <div class="row justify-content-md-between">
-          <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-first"
-            src="./img/undraw_fast_car_p4cu.svg">
-          <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-last">
-            <p class="lead text-primary">Truck Transport</p>
-            <ul>
-              <li class='service-list'>
-                Domestic truck transportation provides a full range of domestic truck services from and to all
-                areas in Thailand.
-              </li>
-              <li class='service-list'>
-                Cross Border Trucking provides cross border trucking from Thailand to Cambodia, Myanmar,
-                Malaysia, Vietnam and Laos by cross border trucking and In-transit shipment.
-              </li>
-              <li class='service-list'>
-                Truck service type by Full truck
-                load and Less than truck load
-              </li>
-              <li class='service-list'>
-                Custom Brokerage
-              </li>
-            </ul>
-
-          </div>
         </div>
       </div>
-    </section>
-    <!-- Quotation Section -->
-    <section class="page-section bg-light" id="quote">
-      <div class="container">
+      <div class="row justify-content-md-between">
+        <div class="service-text col-xl-6 col-md-12 order-sm-last  order-xl-first">
+          <p class="lead text-primary">Customs Clearance</p>
+          <ul>
+            <li class='service-list'>
+              Import and Export customs clearance services
+            </li>
+            <li class='service-list'>
+              Duty and Tax assessment
+            </li>
+            <li class='service-list'>
+              International trade / Documentation
+            </li>
+            <li class='service-list'>
+              Customs consultancy service
+            </li>
+            <li class='service-list'>
+              Manifests and declarations
+            </li>
+            <li class='service-list'>
+              Electronic data interchange with Customs
+            </li>
+            <li class='service-list'>
+              Document processing, Tax refund and exemption
+            </li>
+          </ul>
 
-        <!-- Quotation Section Heading -->
-        <h2 class="page-section-heading text-center text-secondary mb-3">Get Quotation</h2>
+        </div>
+        <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-last"
+          src="./img/undraw_fill_forms_yltj.svg">
+      </div>
+      <div class="row justify-content-md-between">
+        <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-first"
+          src="./img/undraw_aircraft_fbvl.svg">
+        <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-last">
+          <p class="lead text-primary">Air Freight</p>
+          <ul>
+            <li class='service-list'>
+              Worldwide air cargo services
+            </li>
+            <li class='service-list'>
+              Individual consignments and express services
+            </li>
+            <li class='service-list'>
+              Global consolidated transport
+              network
+            </li>
+            <li class='service-list'>
+              Complete aircraft chartering
+            </li>
+            <li class='service-list'>
+              Custom Brokerage
+            </li>
 
-        <!-- Quotation Section Form -->
-        <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <div class="card p-4">
-              <div class="d-flex btn-group mb-3">
-                <ol class="step-bar w-100">
-                  <li class="is-active step" id="package-step"><span>Package Detail</span></li>
-                  <li class="step" id="transport-step"><span>Transport Option</span></li>
-                  <li class="step" id="quote-step"><span>Get Quote</span></li>
-                </ol>
+          </ul>
+
+        </div>
+      </div>
+      <div class="row justify-content-md-between">
+        <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-first">
+          <p class="lead text-primary">Sea Freight</p>
+          <ul>
+            <li class='service-list'>
+              Trained and certified personnel which includes an "Emergency Response
+            </li>
+            <li class='service-list'>
+              Import and Export
+            </li>
+            <li class='service-list'>
+              LCL
+              consolidation & FCL
+            </li>
+            <li class='service-list'>
+              Stuffing and un-stuffing
+            </li>
+            <li class='service-list'>
+              Combined sea / air services
+            </li>
+            <li class='service-list'>
+              Custom Brokerage
+            </li>
+            <li class='service-list'>
+              Inter-modal transport
+            </li>
+            <li class='service-list'>
+              Transshipment hub
+            </li>
+            <li class='service-list'>
+              Packing and Fumigation
+            </li>
+            <li class='service-list'>
+              Project cargo
+            </li>
+            <li class='service-list'>
+              Flat Rack and special equipment
+            </li>
+          </ul>
+
+        </div>
+        <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-last"
+          src="./img/undraw_Yacht_8g6r.svg">
+      </div>
+      <div class="row justify-content-md-between">
+        <img class="service-img p-md-3 col-xl-4 col-md-12 order-sm-first order-xl-first"
+          src="./img/undraw_fast_car_p4cu.svg">
+        <div class="service-text col-xl-6 col-md-12 order-sm-last order-xl-last">
+          <p class="lead text-primary">Truck Transport</p>
+          <ul>
+            <li class='service-list'>
+              Domestic truck transportation provides a full range of domestic truck services from and to all
+              areas in Thailand.
+            </li>
+            <li class='service-list'>
+              Cross Border Trucking provides cross border trucking from Thailand to Cambodia, Myanmar,
+              Malaysia, Vietnam and Laos by cross border trucking and In-transit shipment.
+            </li>
+            <li class='service-list'>
+              Truck service type by Full truck
+              load and Less than truck load
+            </li>
+            <li class='service-list'>
+              Custom Brokerage
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Quotation Section -->
+  <section class="page-section bg-light" id="quote">
+    <div class="container">
+
+      <!-- Quotation Section Heading -->
+      <h2 class="page-section-heading text-center text-secondary mb-3">Get Quotation</h2>
+
+      <!-- Quotation Section Form -->
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div class="card p-4">
+            <div class="d-flex btn-group mb-3">
+              <ol class="step-bar w-100">
+                <li class="is-active step" id="package-step"><span>Package Detail</span></li>
+                <li class="step" id="transport-step"><span>Transport Option</span></li>
+                <li class="step" id="quote-step"><span>Get Quote</span></li>
+              </ol>
+            </div>
+
+            <form name="packageform" class="quote-form" id="packageform" novalidate="novalidate">
+              <div class="form-head mb-2">Enter Your Package Detail</div>
+              <div class="input-group form-group col-md-12">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" id="basic-addon1">Width Height Depth(cm)</label>
+                </div>
+                <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="width">
+                <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="height">
+                <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="depth">
+
+              </div>
+              <div class="form-row mx-2">
+                <div class="form-group col-md-3">
+                  <label for="quantity">Quantity</label>
+                  <input type="text" class="form-control" id="quantity">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="quantity">Weight</label>
+                  <input type="text" class="form-control" id="weight">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="to" class="d-block">Type</label>
+                  <div class="btn-group " role="group" aria-label="Basic example">
+                    <button type="button" id="type-box" class="btn type-btn btn-secondary active">Box</button>
+                    <button type="button" id="type-carton" class="btn type-btn btn-secondary">Carton</button>
+                    <button type="button" id="type-pallet" class="btn type-btn btn-secondary">Pallet</button>
+                    <button type="button" id="type-wooden" class="btn type-btn btn-secondary">Wooden case</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <form name="transportform" class="quote-form hide" id="transportform" novalidate="novalidate">
+              <div class="form-head mb-2">Choose your type of transport</div>
+              <div class="d-flex justify-content-between mb-4">
+                <div class="card type-card mx-2" id='air-type-card' style="width: 18rem;">
+                  <div class="card-body d-flex flex-column justify-content-between  text-center">
+                    <img src="./img/undraw_aircraft_fbvl.svg" class="card-img-top mb-2" alt="...">
+                    <div>Air</div>
+                    <div class="form-check card-text hide">
+                      <input class="form-check-input form-trans" type="radio" name="transport_type" id="air_type"
+                        value="air_type">
+                    </div>
+                  </div>
+                </div>
+                <div class="card type-card mx-2" id='sea-type-card' style="width: 18rem;">
+                  <div class="card-body  d-flex flex-column justify-content-between text-center">
+                    <img src="./img/undraw_Yacht_8g6r.svg" class="card-img-top mb-2" alt="...">
+                    <div>Sea</div>
+                    <div class="form-check card-text hide">
+                      <input class="form-check-input form-trans" type="radio" name="transport_type" id="sea_type"
+                        value="sea_type">
+                    </div>
+                  </div>
+                </div>
+                <div class="card type-card mx-2" id='land-type-card' style="width: 18rem;">
+                  <div class="card-body  d-flex flex-column justify-content-between text-center">
+                    <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
+                    <div>Land</div>
+                    <div class="form-check card-text hide">
+                      <input class="form-check-input form-trans" type="radio" name="transport_type" id="land_type"
+                        value="land_type">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-10 mb-3 hide" id='land-fixed'>
+                <label for="from" class="col-form-label">Available destination</label>
+                <select class="form-control" id="land-form">
+                </select>
               </div>
 
-              <form name="packageform" class="quote-form" id="packageform" novalidate="novalidate">
-                <div class="form-head mb-2">Enter Your Package Detail</div>
-                <div class="input-group form-group col-md-12">
-                  <div class="input-group-prepend">
-                    <label class="input-group-text" id="basic-addon1">Width Height Depth(cm)</label>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="width">
-                  <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="height">
-                  <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="depth">
 
-                </div>
-                <div class="form-row mx-2">
-                  <div class="form-group col-md-3">
-                    <label for="quantity">Quantity</label>
-                    <input type="text" class="form-control" id="quantity">
-                  </div>
-                  <div class="form-group col-md-3">
-                    <label for="quantity">Weight</label>
-                    <input type="text" class="form-control" id="weight">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="to" class="d-block">Type</label>
-                    <div class="btn-group " role="group" aria-label="Basic example">
-                      <button type="button" id="type-box" class="btn type-btn btn-secondary active">Box</button>
-                      <button type="button" id="type-carton" class="btn type-btn btn-secondary">Carton</button>
-                      <button type="button" id="type-pallet" class="btn type-btn btn-secondary">Pallet</button>
-                      <button type="button" id="type-wooden" class="btn type-btn btn-secondary">Wooden case</button>
-                    </div>
+            </form>
+            <div id="quoteform" class="quote-form hide">
+              <div class="form-head">Your Estimate Price is</div>
+              <div class="card border-primary mb-4">
+
+                <div class="card-body ">
+                  <div class="d-flex justify-content-center">
+                    <h1 id="quoteprice">2500</h1>
+                    <h3>THB</h3>
                   </div>
                 </div>
-              </form>
-              <form name="transportform" class="quote-form hide" id="transportform" novalidate="novalidate">
-                <div class="form-head mb-2">Choose your type of transport</div>
-                <div class="d-flex justify-content-between mb-4">
-                  <div class="card type-card mx-2" id='air-type-card' style="width: 18rem;">
-                    <div class="card-body d-flex flex-column justify-content-between  text-center">
-                      <img src="./img/undraw_aircraft_fbvl.svg" class="card-img-top mb-2" alt="...">
-                      <div>Air</div>
-                      <div class="form-check card-text hide">
-                        <input class="form-check-input form-trans" type="radio" name="transport_type" id="air_type"
-                          value="air_type">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card type-card mx-2" id='sea-type-card' style="width: 18rem;">
-                    <div class="card-body  d-flex flex-column justify-content-between text-center">
-                      <img src="./img/undraw_Yacht_8g6r.svg" class="card-img-top mb-2" alt="...">
-                      <div>Sea</div>
-                      <div class="form-check card-text hide">
-                        <input class="form-check-input form-trans" type="radio" name="transport_type" id="sea_type"
-                          value="sea_type">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card type-card mx-2" id='land-type-card' style="width: 18rem;">
-                    <div class="card-body  d-flex flex-column justify-content-between text-center">
-                      <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
-                      <div>Land</div>
-                      <div class="form-check card-text hide">
-                        <input class="form-check-input form-trans" type="radio" name="transport_type" id="land_type"
-                          value="land_type">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-10 mb-3 hide" id='land-fixed'>
-                  <label for="from" class="col-form-label">Available destination</label>
-                  <select class="form-control" id="land-form">
-                  </select>
-                </div>
 
-
-              </form>
-              <div id="quoteform" class="quote-form hide">
-                <div class="form-head">Your Estimate Price is</div>
-                <div class="card border-primary mb-4">
-
-                  <div class="card-body ">
-                    <div class="d-flex justify-content-center">
-                      <h1 id="quoteprice">2500</h1>
-                      <h3>THB</h3>
-                    </div>
-                  </div>
-
-                </div>
-                <button type="button" class="btn btn-primary btn-lg btn-block" id="booking">Booking Now!</button>
               </div>
-              <div class="form-group" id="sentformcontainer">
-                <button type="submit" class="btn btn-primary" id="sentform">Next Step</button>
-              </div>
+              <button type="button" class="btn btn-primary btn-lg btn-block" id="booking">Booking Now!</button>
+            </div>
+            <div class="form-group" id="sentformcontainer">
+              <button type="submit" class="btn btn-primary" id="sentform">Next Step</button>
             </div>
           </div>
         </div>
-
       </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer text-center">
-      <div class="container">
-        <div class="row">
+    </div>
+  </section>
 
-          <!-- Footer Location -->
-          <div class="col-lg-6 mb-5 mb-lg-0 text-left">
-            <h4 class="mb-4">Location</h4>
-            <ul class="no-style">
-              <li>
-                <p>JN Success Co., Ltd. </p>
-              </li>
-              <li>
-                <p>58/12 Moo 5, T.Bangmaenang, A.Bangyai</p>
-                <p>Nonthaburi 11140 Thailand</p>
-              </li>
-              <li>
-                <p>Tel. (662) 147-2514 </p>
-              </li>
-              <li>
-                <p>Mobile : (086) 089-1118 </p>
-              </li>
-              <li>
-                <p>E-mail : jeab@jns2010.com</p>
-              </li>
-            </ul>
-          </div>
-          <!-- Footer About Text -->
-          <div class="col-lg-6 text-left">
-            <h4 class="mb-4">About JN Success</h4>
-            <ul class="no-style">
-              <li>
-                <p>Founded in 2010, based in Thailand </p>
-              </li>
-              <li>
-                <p>Providing forwarding, transportation, cross border,
-                  warehousing services, project cargo and stuffing and un-stuffing </p>
-              </li>
-              <li>
-                <p>Best connections and creating a global
-                  network throughout Asia, Europe and USA</p>
-              </li>
+  <!-- Footer -->
+  <footer class="footer text-center">
+    <div class="container">
+      <div class="row">
 
-            </ul>
+        <!-- Footer Location -->
+        <div class="col-lg-6 mb-5 mb-lg-0 text-left">
+          <h4 class="mb-4">Location</h4>
+          <ul class="no-style">
+            <li>
+              <p>JN Success Co., Ltd. </p>
+            </li>
+            <li>
+              <p>58/12 Moo 5, T.Bangmaenang, A.Bangyai</p>
+              <p>Nonthaburi 11140 Thailand</p>
+            </li>
+            <li>
+              <p>Tel. (662) 147-2514 </p>
+            </li>
+            <li>
+              <p>Mobile : (086) 089-1118 </p>
+            </li>
+            <li>
+              <p>E-mail : jeab@jns2010.com</p>
+            </li>
+          </ul>
+        </div>
+        <!-- Footer About Text -->
+        <div class="col-lg-6 text-left">
+          <h4 class="mb-4">About JN Success</h4>
+          <ul class="no-style">
+            <li>
+              <p>Founded in 2010, based in Thailand </p>
+            </li>
+            <li>
+              <p>Providing forwarding, transportation, cross border,
+                warehousing services, project cargo and stuffing and un-stuffing </p>
+            </li>
+            <li>
+              <p>Best connections and creating a global
+                network throughout Asia, Europe and USA</p>
+            </li>
 
-          </div>
+          </ul>
 
         </div>
+
       </div>
-    </footer>
-
-    <!-- Copyright Section -->
-    <section class="copyright py-4 text-center text-white">
-      <div class="container">
-        <small>Copyright &copy; JN Success 2020</small>
-      </div>
-    </section>
-
-    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-    <div class="scroll-to-top d-lg-none position-fixed ">
-      <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
-        <i class="fa fa-chevron-up"></i>
-      </a>
     </div>
+  </footer>
 
-    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-    <div class="scroll-to-top d-lg-none position-fixed ">
-      <a class="./js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
-        <i class="fa fa-chevron-up"></i>
-      </a>
+  <!-- Copyright Section -->
+  <section class="copyright py-4 text-center text-white">
+    <div class="container">
+      <small>Copyright &copy; JN Success 2020</small>
     </div>
-    <!-- TODO: Add SDKs for Firebase products that you want to use
+  </section>
+
+  <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+  <div class="scroll-to-top d-lg-none position-fixed ">
+    <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+
+  <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+  <div class="scroll-to-top d-lg-none position-fixed ">
+    <a class="./js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+  <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="./vendor/jquery/jquery.min.js"></script>
-    <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="./vendor/jquery/jquery.min.js"></script>
+  <script src="./vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Plugin JavaScript -->
+  <script src="./vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Plugin JavaScript -->
-    <script src="./vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Contact Form JavaScript -->
+  <script src="./js/jqBootstrapValidation.js"></script>
+  <script src="./js/form.js"></script>
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="/__/firebase/7.13.1/firebase-app.js"></script>
 
-    <!-- Contact Form JavaScript -->
-    <script src="./js/jqBootstrapValidation.js"></script>
-    <script src="./js/form.js"></script>
-    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="/__/firebase/7.13.1/firebase-app.js"></script>
-
-    <!-- Add Firebase products that you want to use -->
-    <script src="/__/firebase/7.13.1/firebase-auth.js"></script>
-    <script src="/__/firebase/7.13.1/firebase-firestore.js"></script>
-    <script src="/__/firebase/7.13.1/firebase-storage.js"></script>
-    <!-- Load the Firebase SDKs before loading this file -->
-    <script src="/__/firebase/init.js"></script>
-    <!-- Custom scripts for this template -->
-    <script src="./js/freelancer.js"></script>
-    <script src="./js/dbcon.js"></script>
-    <script src="./js/main.js"></script>
-    <script src="./js/api.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="/__/firebase/7.13.1/firebase-auth.js"></script>
+  <script src="/__/firebase/7.13.1/firebase-firestore.js"></script>
+  <script src="/__/firebase/7.13.1/firebase-storage.js"></script>
+  <!-- Load the Firebase SDKs before loading this file -->
+  <script src="/__/firebase/init.js"></script>
+  <!-- Custom scripts for this template -->
+  <script src="./js/freelancer.js"></script>
+  <script src="./js/dbcon.js"></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/api.js"></script>
 
 </body>
 
