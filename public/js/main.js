@@ -414,51 +414,63 @@ getStatus = () => {
       }
     })
 }
+
+isFormPackageValid = () => {
+  let packageForm = $('#packageform')[0].elements || [];
+  for (let i = 0;i < packageForm.length; i++){ // test for number only
+    if (!/^[0-9]+$/.test(packageForm[i].value)) return false
+  }
+
+  return true
+}
+
 $('#sentform').on('click', function () {
   let step = $('.step.is-active').attr('id')
   switch (step) {
     case 'package-step':
-      $('#package-step').attr('class', 'is-complete step')
-      $('#transport-step').attr('class', 'is-active step')
-      $('#package-step').on('click', function () {
-        $('#transport-step').attr('class', 'step')
-        $('#package-step').attr('class', 'is-active step')
-        $('.quote-form').addClass('hide')
-        $('#packageform').removeClass('hide')
-        $('#transport-step').on('click', function () {
-          $('#package-step').attr('class', 'is-complete step')
-          $('#transport-step').attr('class', 'is-active step')
-          $('#packageform').addClass('hide')
-          $('#transportform').removeClass('hide')
+      if (isFormPackageValid()) {
+        $('#package-step').attr('class', 'is-complete step')
+        $('#transport-step').attr('class', 'is-active step')
+        $('#package-step').on('click', function () {
+          $('#transport-step').attr('class', 'step')
+          $('#package-step').attr('class', 'is-active step')
+          $('.quote-form').addClass('hide')
+          $('#packageform').removeClass('hide')
+          $('#transport-step').on('click', function () {
+            $('#package-step').attr('class', 'is-complete step')
+            $('#transport-step').attr('class', 'is-active step')
+            $('#packageform').addClass('hide')
+            $('#transportform').removeClass('hide')
+          })
         })
-      })
-      $('#packageform').addClass('hide')
-      $('#transportform').removeClass('hide')
-      $('.type-card').on('click', function () {
-        let transId = $(this).attr('id')
-        switch (transId) {
-          case 'air-type-card':
-            $('.type-card').removeClass('active')
-            $('#air-type-card').addClass('active')
-            $('.form-trans').removeAttr('checked')
-            $('#air_type').attr('checked', 'checked')
-            break
-          case 'sea-type-card':
-            $('.type-card').removeClass('active')
-            $('#sea-type-card').addClass('active')
-            $('.form-trans').removeAttr('checked')
-            $('#sea_type').attr('checked', 'checked')
-            break
-          case 'land-type-card':
-            $('.type-card').removeClass('active')
-            $('#land-type-card').addClass('active')
-            $('.form-trans').removeAttr('checked')
-            $('#land_type').attr('checked', 'checked')
-            break
-          default:
-            break
-        }
-      })
+        $('#packageform').addClass('hide')
+        $('#transportform').removeClass('hide')
+        $('.type-card').on('click', function () {
+          let transId = $(this).attr('id')
+          switch (transId) {
+            case 'air-type-card':
+              $('.type-card').removeClass('active')
+              $('#air-type-card').addClass('active')
+              $('.form-trans').removeAttr('checked')
+              $('#air_type').attr('checked', 'checked')
+              break
+            case 'sea-type-card':
+              $('.type-card').removeClass('active')
+              $('#sea-type-card').addClass('active')
+              $('.form-trans').removeAttr('checked')
+              $('#sea_type').attr('checked', 'checked')
+              break
+            case 'land-type-card':
+              $('.type-card').removeClass('active')
+              $('#land-type-card').addClass('active')
+              $('.form-trans').removeAttr('checked')
+              $('#land_type').attr('checked', 'checked')
+              break
+            default:
+              break
+          }
+        })
+      }
       break
     case 'transport-step':
       $('#quoteprice').html(
