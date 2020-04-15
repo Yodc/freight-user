@@ -122,5 +122,13 @@
 
 .form-text-error {
   margin-bottom: 1.25rem;
+  padding-left: 15px;
+}
+
+.has-error {
+  color: #d82e2e;
+  background-color: #fff;
+  outline: 0;
+  box-shadow: 0px 8px 6px -6px rgba(240, 11, 11, 0.589);
 }
 

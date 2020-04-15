@@ -358,14 +358,22 @@ getStatus = () => {
 }
 isFormPackageValid = () => {
   let packageForm = $('#packageform')[0].elements || [];
+  let isValid = true;
   for (let i = 0;i < packageForm.length; i++){ // test for number only
-    if (!/^[0-9]+$/.test(packageForm[i].value)) {
-      $('#errorPackageform').removeClass('hide')
-      return false
+    let id = packageForm[i].id || ""
+    console.log(id)
+    if (id == "quantity" && !/^\d+$/.test(packageForm[i].value)) {
+      isValid = false
+      packageForm[i].classList.add('has-error')
+    } else if (id != "quantity" && !/^[0-9]*\.[0-9]+$|^[0-9]+$/.test(packageForm[i].value)) {
+      isValid = false
+      packageForm[i].classList.add('has-error')
+    } else {
+      packageForm[i].classList.remove('has-error')
     }
   }
-  $('#errorPackageform').addClass('hide')
-  return true
+  !isValid ? $('#errorPackageform').removeClass('hide') : $('#errorPackageform').addClass('hide')
+  return isValid
 }
 $('.myAlert').hide()
 $('#alert-close').on('click', function () {
