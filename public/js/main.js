@@ -418,9 +418,12 @@ getStatus = () => {
 isFormPackageValid = () => {
   let packageForm = $('#packageform')[0].elements || [];
   for (let i = 0;i < packageForm.length; i++){ // test for number only
-    if (!/^[0-9]+$/.test(packageForm[i].value)) return false
+    if (!/^[0-9]+$/.test(packageForm[i].value)) {
+      $('#errorPackageform').removeClass('hide')
+      return false
+    }
   }
-
+  $('#errorPackageform').addClass('hide')
   return true
 }
 
@@ -437,10 +440,12 @@ $('#sentform').on('click', function () {
           $('.quote-form').addClass('hide')
           $('#packageform').removeClass('hide')
           $('#transport-step').on('click', function () {
-            $('#package-step').attr('class', 'is-complete step')
-            $('#transport-step').attr('class', 'is-active step')
-            $('#packageform').addClass('hide')
-            $('#transportform').removeClass('hide')
+            if (isFormPackageValid()) {
+              $('#package-step').attr('class', 'is-complete step')
+              $('#transport-step').attr('class', 'is-active step')
+              $('#packageform').addClass('hide')
+              $('#transportform').removeClass('hide')
+            }
           })
         })
         $('#packageform').addClass('hide')
