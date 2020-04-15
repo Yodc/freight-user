@@ -5,7 +5,7 @@ db.collection('air')
       $('.inter-air').append(`<option value="${doc.id}">${doc.data().air_name}</option>`)
     })
   })
-$('.thai-air').append(`<option value="thai">Bankok,thailand</option>`)
+$('.thai-air').append(`<option value="thai">Bangkok,thailand</option>`)
 
 db.collection('sea')
   .orderBy('sea_name')
@@ -14,7 +14,7 @@ db.collection('sea')
       $('.inter-sea').append(`<option value="${doc.id}">${doc.data().sea_name}</option>`)
     })
   })
-$('.thai-sea').append(`<option value="thai">Bankok,thailand</option>`)
+$('.thai-sea').append(`<option value="thai">Bangkok,thailand</option>`)
 
 $('#status').on('click', function () {
   if (status.status === 'newBooking') {

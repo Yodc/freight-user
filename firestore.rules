@@ -1,11 +1,27 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-     match /{document=**} {
-      allow read, write: if true;
-    }
-   match /users/{userId}{
+     allow read, write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    match /users/{userId}{
+     allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+   }
+   match /income_monthly/{incomeId}{
+     allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+   }
+   match /income_year/{incomeId}{
+     allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+   }
+   match /users/{userId}/{documents=**}{
      allow read, update, delete:if request.auth.uid == userId;
+   }
+   match /status/{statusId}/{documents=**}{
+     allow read, update, delete:if request.auth.uid == statusId;
+   }
+   match /air/{document}{
+     allow read: if true
+   }
+   match /sea/{document}{
+     allow read: if true
    }
   }
 }

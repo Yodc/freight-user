@@ -12,6 +12,7 @@ var uiConfig = {
             first_name: authResult.user.displayName.split(' ')[0],
             last_name: authResult.user.displayName.split(' ')[1],
             tel: authResult.user.phoneNumber,
+            role: 'customer',
             status: 'nodata',
           })
         storage.ref().child(`users/${auth.currentUser.uid}`)
