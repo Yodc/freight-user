@@ -7,14 +7,19 @@ alertMessage = (message, type) => {
 getPrice = (data) => {
   let price
   let vol =
-    ((parseFloat(data.width) * parseFloat(data.height) * parseFloat(data.length)) / 6000) *
+    parseFloat(data.width) *
+    parseFloat(data.height) *
+    parseFloat(data.length) *
     parseFloat(data.quantity)
-  let compare = vol > parseFloat(data.weight) ? vol : parseFloat(data.weight)
+  let compare
   switch (data.type) {
     case 'air':
+      vol = vol / 6000
+      compare = vol > parseFloat(data.weight) ? vol : parseFloat(data.weight)
       price = Math.round(compare * 2.5 * 32)
       break
     case 'sea':
+      vol = vol / 1000000
       price = Math.round(vol * 25 * 32)
       break
     case 'land':
@@ -64,6 +69,45 @@ getStatus = () => {
           $('#status-card').removeClass('hide')
           $('#nodata').addClass('is-active')
           $('#newbooking').removeClass('hide')
+          $('#air-swap').click(() => {
+            $('.thai-air').empty()
+            $('.inter-air').empty()
+            $('.air-from').toggleClass('thai-air')
+            $('.air-from').toggleClass('inter-air')
+            $('.air-to').toggleClass('thai-air')
+            $('.air-to').toggleClass('inter-air')
+            db.collection('air')
+              .orderBy('air_name')
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                  $('.inter-air').append(
+                    `<option value="${doc.id}">${doc.data().air_name}</option>`
+                  )
+                })
+                $('.thai-air').append(`<option value="thai">Bangkok,Thailand</option>`)
+              })
+          })
+          $('#sea-swap').click(() => {
+            $('.thai-sea').empty()
+            $('.inter-sea').empty()
+            $('.sea-from').toggleClass('thai-sea')
+            $('.sea-from').toggleClass('inter-sea')
+            $('.sea-to').toggleClass('thai-sea')
+            $('.sea-to').toggleClass('inter-sea')
+            db.collection('sea')
+              .orderBy('sea_name')
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
+                  $('.inter-sea').append(
+                    `<option value="${doc.id}">${doc.data().sea_name}</option>`
+                  )
+                })
+                $('.thai-sea').append(`<option value="thai">Khlong Toei Pier,Thailand</option>`)
+                $('.thai-sea').append(`<option value="thai">Laemchabang Port,Thailand</option>`)
+              })
+          })
           break
         case 'booking':
           db.collection('status')
@@ -98,12 +142,12 @@ getStatus = () => {
                 '.bookingContainer'
               )
               addCard(
-                'telegram-plane',
+                'paper-plane',
                 `Origin - Destination`,
                 `${data.origin} - ${data.destination}`,
                 '.bookingContainer'
               )
-              addCard('calendar-alt', `Estimate Time Arrive`, `${data.eta}`, '.bookingContainer')
+              addCard('calendar-alt', `Estimate Time Departure`, `${data.etd}`, '.bookingContainer')
               storage
                 .ref()
                 .child(`users/${auth.currentUser.uid}/booking/packing_list.pdf`)
@@ -142,7 +186,7 @@ getStatus = () => {
               $('.status_loading').addClass('hide')
               $('#getBooking').addClass(`hide`)
               $('#status-card').removeClass('hide')
-              let data = doc.data().appoointment
+              let data = doc.data().appointment
               let booking = doc.data().booking
               $('#nodata').addClass('is-complete')
               $('#appointment').addClass('is-active')
@@ -157,7 +201,7 @@ getStatus = () => {
                     '.appointmentContainer'
                   )
                   addCard(
-                    'telegram-plane',
+                    'paper-plane',
                     `Origin - Destination`,
                     `${booking.origin} - ${booking.destination}`,
                     '.appointmentContainer'
@@ -189,20 +233,20 @@ getStatus = () => {
                     '.appointmentContainer'
                   )
                   addCard(
-                    'carlendar-all',
+                    'calendar-week',
                     `Loading date`,
                     `${data.loading_date}`,
                     '.appointmentContainer'
                   )
                   addCard(
                     'user-tie',
-                    `Contact`,
+                    `Loading Contact`,
                     `${data.contact_name} - ${data.contact_tel}`,
                     '.appointmentContainer'
                   )
                   addCard(
                     'id-card',
-                    `Contact`,
+                    `Transport Contact`,
                     `${data.transporter_name} - ${data.transporter_tel}`,
                     '.appointmentContainer'
                   )
@@ -215,7 +259,7 @@ getStatus = () => {
                     '.appointmentContainer'
                   )
                   addCard(
-                    'telegram-plane',
+                    'paper-plane',
                     `Origin - Destination`,
                     `${booking.origin} - ${booking.destination}`,
                     '.appointmentContainer'
@@ -247,27 +291,27 @@ getStatus = () => {
                     '.appointmentContainer'
                   )
                   addCard(
-                    'carlendar-all',
+                    'calendar-week',
                     `Loading date`,
                     `${data.loading_date}`,
                     '.appointmentContainer'
                   )
                   addCard(
                     'user-tie',
-                    `Contact`,
+                    `Loading Contact`,
                     `${data.contact_name} - ${data.contact_tel}`,
                     '.appointmentContainer'
                   )
                   addCard(
                     'id-card',
-                    `Contact`,
+                    `Transport Contact`,
                     `${data.transporter_name} - ${data.transporter_tel}`,
                     '.appointmentContainer'
                   )
                   break
                 case 'land':
                   addCard(
-                    'telegram-plane',
+                    'paper-plane',
                     `Origin - Destination`,
                     `${booking.origin} - ${booking.destination}`,
                     '.appointmentContainer'
@@ -356,25 +400,6 @@ getStatus = () => {
       }
     })
 }
-isFormPackageValid = () => {
-  let packageForm = $('#packageform')[0].elements || [];
-  let isValid = true;
-  for (let i = 0;i < packageForm.length; i++){ // test for number only
-    let id = packageForm[i].id || ""
-    console.log(id)
-    if (id == "quantity" && !/^\d+$/.test(packageForm[i].value)) {
-      isValid = false
-      packageForm[i].classList.add('has-error')
-    } else if (id != "quantity" && !/^[0-9]*\.[0-9]+$|^[0-9]+$/.test(packageForm[i].value)) {
-      isValid = false
-      packageForm[i].classList.add('has-error')
-    } else {
-      packageForm[i].classList.remove('has-error')
-    }
-  }
-  !isValid ? $('#errorPackageform').removeClass('hide') : $('#errorPackageform').addClass('hide')
-  return isValid
-}
 $('.myAlert').hide()
 $('#alert-close').on('click', function () {
   $('.myAlert').hide()
@@ -402,16 +427,16 @@ $('#booking-submit').on('click', function () {
     .doc(auth.currentUser.uid)
     .update({
       booking: {
-        width: $('#booking_width').val(),
-        height: $('#booking_height').val(),
-        length: $('#booking_length').val(),
-        quantity: $('#booking_quantity').val(),
-        weight: $('#booking_weight').val(),
+        width: parseFloat($('#booking_width').val()),
+        height: parseFloat($('#booking_height').val()),
+        length: parseFloat($('#booking_length').val()),
+        quantity: parseFloat($('#booking_quantity').val()),
+        weight: parseFloat($('#booking_weight').val()),
         package_type: $('.booking-type.active').attr('value'),
         transport_type,
         origin,
         destination,
-        eta: $('#booking_eta').val(),
+        etd: $('#booking_etd').val(),
       },
     })
     .then(() => {
@@ -433,67 +458,130 @@ $('#booking-submit').on('click', function () {
   $('#status-modal').modal('hide')
 })
 $('#getBooking').on('click', function () {
-  let price = getPrice({
-    width: $('#booking_width').val(),
-    height: $('#booking_height').val(),
-    length: $('#booking_length').val(),
-    quantity: $('#booking_quantity').val(),
-    weight: $('#booking_weight').val(),
-    type: $('.booking-card.active').attr('id').split('-')[0],
-  })
-  $('#bookingPrice').html(price)
-  $('#newbooking').addClass('hide')
-  $('#getBooking').addClass('hide')
-  $('#eprice').removeClass('hide')
+  let condition =
+    $('#booking_width').val().length !== 0 &&
+    $('#booking_height').val().length !== 0 &&
+    $('#booking_length').val().length !== 0 &&
+    $('#booking_quantity').val().length !== 0 &&
+    $('#booking_weight').val().length !== 0
+  if (condition) {
+    let price = getPrice({
+      width: $('#booking_width').val(),
+      height: $('#booking_height').val(),
+      length: $('#booking_length').val(),
+      quantity: $('#booking_quantity').val(),
+      weight: $('#booking_weight').val(),
+      type: $('.booking-card.active').attr('id').split('-')[0],
+    })
+    $('#bookingPrice').html(price)
+    $('#newbooking').addClass('hide')
+    $('#getBooking').addClass('hide')
+    $('#eprice').removeClass('hide')
+  } else {
+    $('.bookingHelp').removeClass('text-muted')
+    $('.bookingHelp').addClass('text-danger')
+  }
+})
+$('.bookingInput').keyup(function () {
+  if ($(this).val().length === 0) {
+    $('.bookingHelp').removeClass('text-muted')
+    $('.bookingHelp').addClass('text-danger')
+  } else {
+    $('.bookingHelp').removeClass('text-danger')
+    $('.bookingHelp').addClass('text-muted')
+  }
+})
+$('.quoteInput').keyup(function () {
+  if ($(this).val().length === 0) {
+    $('.quoteHelp').removeClass('text-muted')
+    $('.quoteHelp').addClass('text-danger')
+  } else {
+    $('.quoteHelp').removeClass('text-danger')
+    $('.quoteHelp').addClass('text-muted')
+  }
 })
 $('#sentform').on('click', function () {
   let step = $('.step.is-active').attr('id')
+  showPackageStep = (thisClass) => {
+    if (thisClass) {
+      $(thisClass).attr('class', 'step is-complete')
+    }
+    $('#package-step').addClass('is-active')
+    $('.quote-form').addClass('hide')
+    $('#packageform').removeClass('hide')
+  }
+  showTransportStep = (thisClass) => {
+    if (thisClass) {
+      $(thisClass).attr('class', 'step is-complete')
+    }
+    $('#transport-step').addClass('is-active')
+    $('.quote-form').addClass('hide')
+    $('#transportform').removeClass('hide')
+  }
+  showQuoteStep = (thisClass) => {
+    if (thisClass) {
+      $(thisClass).attr('class', 'step is-complete')
+    }
+    $('#quote-step').addClass('is-active')
+    $('.quote-form').addClass('hide')
+    $('#quoteform').removeClass('hide')
+  }
+  $('#package-step').on('click', function () {
+    switch (step) {
+      case 'package-step':
+        showPackageStep()
+        break
+      case 'transport-step':
+        showPackageStep('#transport-step')
+        break
+      case 'quote-step':
+        showPackageStep('#quote-step')
+        break
+      default:
+        break
+    }
+  })
+  $('#transport-step').on('click', function () {
+    switch (step) {
+      case 'package-step':
+        break
+      case 'transport-step':
+        showTransportStep()
+        break
+      case 'quote-step':
+        showTransportStep('#quote-step')
+        break
+      default:
+        break
+    }
+  })
+
+  $('#quote-step').on('click', function () {
+    switch (step) {
+      case 'package-step':
+        break
+      case 'transport-step':
+        break
+      case 'quote-step':
+        showQuoteStep()
+        break
+      default:
+        break
+    }
+  })
   switch (step) {
     case 'package-step':
-      if (isFormPackageValid()) {
-        $('#package-step').attr('class', 'is-complete step')
-        $('#transport-step').attr('class', 'is-active step')
-        $('#package-step').on('click', function () {
-          $('#transport-step').attr('class', 'step')
-          $('#package-step').attr('class', 'is-active step')
-          $('.quote-form').addClass('hide')
-          $('#packageform').removeClass('hide')
-          $('#transport-step').on('click', function () {
-            if (isFormPackageValid()) {
-              $('#package-step').attr('class', 'is-complete step')
-              $('#transport-step').attr('class', 'is-active step')
-              $('#packageform').addClass('hide')
-              $('#transportform').removeClass('hide')
-            }
-          })
-        })
-        $('#packageform').addClass('hide')
-        $('#transportform').removeClass('hide')
-        $('.type-card').on('click', function () {
-          let transId = $(this).attr('id')
-          switch (transId) {
-            case 'air-type-card':
-              $('.type-card').removeClass('active')
-              $('#air-type-card').addClass('active')
-              $('.form-trans').removeAttr('checked')
-              $('#air_type').attr('checked', 'checked')
-              break
-            case 'sea-type-card':
-              $('.type-card').removeClass('active')
-              $('#sea-type-card').addClass('active')
-              $('.form-trans').removeAttr('checked')
-              $('#sea_type').attr('checked', 'checked')
-              break
-            case 'land-type-card':
-              $('.type-card').removeClass('active')
-              $('#land-type-card').addClass('active')
-              $('.form-trans').removeAttr('checked')
-              $('#land_type').attr('checked', 'checked')
-              break
-            default:
-              break
-          }
-        })
+      let condition =
+        $('#width').val().length !== 0 &&
+        $('#height').val().length !== 0 &&
+        $('#length').val().length !== 0 &&
+        $('#quantity').val().length !== 0 &&
+        $('#weight').val().length !== 0
+      if (condition) {
+        showTransportStep('#package-step')
+      } else {
+        $('.quoteHelp').removeClass('text-muted')
+        $('.quoteHelp').addClass('text-danger')
       }
       break
     case 'transport-step':
@@ -507,33 +595,8 @@ $('#sentform').on('click', function () {
           type: $('.type-card.active').attr('id').split('-')[0],
         })
       )
-      $('#transport-step').attr('class', 'is-complete step')
-      $('#quote-step').attr('class', 'is-active step')
-      $('#package-step').on('click', function () {
-        $('#transport-step').attr('class', ' step')
-        $('#quote-step').attr('class', ' step')
-        $('#package-step').attr('class', 'is-active step')
-        $('.quote-form').addClass('hide')
-        $('#packageform').removeClass('hide')
-        $('#sentformcontainer').removeClass('hide')
-      })
-      $('#transport-step').on('click', function () {
-        $('#sentformcontainer').removeClass('hide')
-        $('#quote-step').attr('class', 'step')
-        $('#transport-step').attr('class', 'is-active step')
-        $('.quote-form').addClass('hide')
-        $('#transportform').removeClass('hide')
-        $('#quote-step').on('click', function () {
-          $('#transport-step').attr('class', 'is-complete step')
-          $('#quote-step').attr('class', 'is-active step')
-          $('#sentformcontainer').addClass('hide')
-          $('#transportform').addClass('hide')
-          $('#quoteform').removeClass('hide')
-        })
-      })
-      $('#sentformcontainer').addClass('hide')
-      $('#transportform').addClass('hide')
-      $('#quoteform').removeClass('hide')
+      showQuoteStep('#transport-step')
+
       $('#booking').on('click', function () {
         getStatus()
       })
@@ -541,6 +604,7 @@ $('#sentform').on('click', function () {
       break
   }
 })
+
 $('#getBookingNow').on('click', function () {
   getStatus()
 })
@@ -563,6 +627,12 @@ $('#profiles').on('click', function (e) {
       })
       .then(function () {
         alertMessage('Update Profile Complete', 'success')
+        db.collection('company')
+          .doc($('#signup-company').val())
+          .update({
+            company_name: $('#signup-company').val(),
+            company_color: `${Math.random() * 255},${Math.random() * 255},${Math.random() * 255}`,
+          })
       })
       .catch(function (error) {
         alertMessage(error, 'danger')
@@ -605,6 +675,10 @@ $('.booking-card').on('click', function () {
 })
 $('.type-btn').on('click', function () {
   $('.type-btn').removeClass('active')
+  $(this).addClass('active')
+})
+$('.type-card').on('click', function () {
+  $('.type-card').removeClass('active')
   $(this).addClass('active')
 })
 $('.booking-type').on('click', function () {

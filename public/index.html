@@ -184,22 +184,26 @@
           </div>
           <form name="bookingform" class="booking-form statusContent hide" id="newbooking" novalidate="novalidate">
             <div class="form-head mb-2">Create New Booking</div>
+            <small class="text-muted bookingHelp">Please enter all form</small>
             <div class="input-group form-group col-md-12">
               <div class="input-group-prepend">
                 <label class="input-group-text" id="basic-addon1">Dimention</label>
               </div>
-              <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="booking_width">
-              <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="booking_height">
-              <input type="text" class="form-control" placeholder="Length" aria-label="Length" id="booking_length">
+              <input type="number" class="form-control bookingInput" placeholder="Width" aria-label="Width"
+                id="booking_width">
+              <input type="number" class="form-control bookingInput" placeholder="Height" aria-label="Height"
+                id="booking_height">
+              <input type="number" class="form-control bookingInput" placeholder="Length" aria-label="Length"
+                id="booking_length">
             </div>
             <div class="form-row mx-2">
               <div class="form-group col-md-3">
                 <label for="quantity">Quantity</label>
-                <input type="text" class="form-control" id="booking_quantity">
+                <input type="number" class="form-control bookingInput" id="booking_quantity">
               </div>
               <div class="form-group col-md-3">
                 <label for="quantity">Weight</label>
-                <input type="text" class="form-control" id="booking_weight">
+                <input type="number" class="form-control bookingInput" id="booking_weight">
               </div>
               <div class="form-group col-md-6">
                 <label for="to" class="d-block">Type</label>
@@ -279,8 +283,8 @@
               </div>
             </div>
             <div class="form-group mx-2">
-              <label for="exampleFormControlFile1">Estimate Time Arrive</label>
-              <input type="date" class="form-control" id="booking_eta" min="2000-01-02">
+              <label for="exampleFormControlFile1">Estimate Time Departure</label>
+              <input type="date" class="form-control" id="booking_etd" min="2000-01-02">
             </div>
             <div class="form-group mx-2">
               <label for="exampleFormControlFile1">Packing List</label>
@@ -299,6 +303,14 @@
                 <div class="d-flex justify-content-center">
                   <h1 id="bookingPrice">2500</h1>
                   <h3>THB</h3>
+                </div>
+                <div class="form-group mx-2">
+                  <label for="exampleFormControlFile1">Packing List</label>
+                  <input type="file" class="form-control-file" id="booking_packing_list" accept=".pdf">
+                </div>
+                <div class="form-group mx-2">
+                  <label for="exampleFormControlFile1">Invoice</label>
+                  <input type="file" class="form-control-file" id="booking_invoice" accept=".pdf">
                 </div>
               </div>
 
@@ -563,58 +575,47 @@
 
             <form name="packageform" class="quote-form" id="packageform" novalidate="novalidate">
               <div class="form-head mb-2">Enter Your Package Detail</div>
+              <small class="text-muted quoteHelp">Please enter all form</small>
               <div class="input-group form-group col-md-12">
                 <div class="input-group-prepend">
                   <label class="input-group-text" id="basic-addon1">Dimention</label>
                 </div>
-                <input type="text" class="form-control" placeholder="Width" aria-label="Width" id="width">
-                <input type="text" class="form-control" placeholder="Height" aria-label="Height" id="height">
-                <input type="text" class="form-control" placeholder="Depth" aria-label="Depth" id="length">
-
+                <input type="number" class="form-control quoteInput" placeholder="Width" aria-label="Width" id="width">
+                <input type="number" class="form-control quoteInput" placeholder="Height" aria-label="Height"
+                  id="height">
+                <input type="number" class="form-control quoteInput" placeholder="Depth" aria-label="Depth" id="length">
               </div>
               <div class="form-row mx-2">
                 <div class="form-group col-md-3">
                   <label for="quantity">Quantity</label>
-                  <input type="text" class="form-control" id="quantity">
+                  <input type="number" class="form-control quoteInput" id="quantity">
                 </div>
                 <div class="form-group col-md-3">
                   <label for="quantity">Weight</label>
-                  <input type="text" class="form-control" id="weight">
+                  <input type="number" class="form-control quoteInput" id="weight">
                 </div>
               </div>
-              <small id="errorPackageform" class="form-text form-text-error text-danger hide">Please fills all field and only numbers are allowed.</small>
             </form>
             <form name="transportform" class="quote-form hide" id="transportform" novalidate="novalidate">
               <div class="form-head mb-2">Choose your type of transport</div>
+              <small class="text-muted quoteHelp">Please enter all form</small>
               <div class="d-flex justify-content-between mb-4">
-                <div class="card type-card mx-2" id='air-type-card' style="width: 18rem;">
+                <div class="card type-card active mx-2" id='air-type-card' style="width: 18rem;">
                   <div class="card-body d-flex flex-column justify-content-between  text-center">
                     <img src="./img/undraw_aircraft_fbvl.svg" class="card-img-top mb-2" alt="...">
                     <div>Air</div>
-                    <div class="form-check card-text hide">
-                      <input class="form-check-input form-trans" type="radio" name="transport_type" id="air_type"
-                        value="air_type">
-                    </div>
                   </div>
                 </div>
                 <div class="card type-card mx-2" id='sea-type-card' style="width: 18rem;">
                   <div class="card-body  d-flex flex-column justify-content-between text-center">
                     <img src="./img/undraw_Yacht_8g6r.svg" class="card-img-top mb-2" alt="...">
                     <div>Sea</div>
-                    <div class="form-check card-text hide">
-                      <input class="form-check-input form-trans" type="radio" name="transport_type" id="sea_type"
-                        value="sea_type">
-                    </div>
                   </div>
                 </div>
                 <div class="card type-card mx-2" id='land-type-card' style="width: 18rem;">
                   <div class="card-body  d-flex flex-column justify-content-between text-center">
                     <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
                     <div>Land</div>
-                    <div class="form-check card-text hide">
-                      <input class="form-check-input form-trans" type="radio" name="transport_type" id="land_type"
-                        value="land_type">
-                    </div>
                   </div>
                 </div>
               </div>
