@@ -7,23 +7,27 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint"
-    ]
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
   },
   "hosting": {
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
+      },
+      {
+        "source": "/guest/:id/profile",
+        "destination": "/index.html",
+        "type": 301
+      },
+      {
+        "source": "/getPrice",
+        "function": "getPrice"
       }
-    ]
+    ],
+    "redirects": []
   },
   "storage": {
     "rules": "storage.rules"

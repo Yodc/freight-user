@@ -8,23 +8,44 @@ service cloud.firestore {
     match /status/{userId}{
      allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
    }
+    match /status/{userId}/{documents=**}{
+     allow read, write:if request.auth.uid != null;
+   }
+   match /company/{userId}{
+     allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+   }
    match /income_monthly/{incomeId}{
      allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
    }
    match /income_year/{incomeId}{
      allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
    }
+   match /air/{document}{
+     allow write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+   }
+   match /otp/{document}{
+     allow write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+   }
+   match /company/{document}{
+     allow write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+   }
+   match /sea/{document}{
+     allow write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+   }
    match /users/{userId}/{documents=**}{
      allow read, write:if request.auth.uid == userId;
    }
-   match /status/{statusId}/{documents=**}{
-     allow read, write:if request.auth.uid == statusId;
+   match /status/{userId}{
+     allow read: if true;
    }
    match /air/{document}{
      allow read: if true
    }
+   match /otp/{document}{
+     allow read, write: if true
+   }
    match /company/{document}{
-     allow read, update: if true
+     allow read: if true
    }
    match /sea/{document}{
      allow read: if true

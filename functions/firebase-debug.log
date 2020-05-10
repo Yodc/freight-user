@@ -1,0 +1,35 @@
+[debug] [2020-05-07T10:57:19.598Z] ----------------------------------------------------------------------
+[debug] [2020-05-07T10:57:19.600Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\firm\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only functions
+[debug] [2020-05-07T10:57:19.600Z] CLI Version:   8.0.2
+[debug] [2020-05-07T10:57:19.600Z] Platform:      win32
+[debug] [2020-05-07T10:57:19.600Z] Node Version:  v13.0.1
+[debug] [2020-05-07T10:57:19.601Z] Time:          Thu May 07 2020 17:57:19 GMT+0700 (Indochina Time)
+[debug] [2020-05-07T10:57:19.601Z] ----------------------------------------------------------------------
+[debug] [2020-05-07T10:57:19.601Z] 
+[debug] [2020-05-07T10:57:19.606Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-05-07T10:57:19.607Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project freight-f4226. This may result in unexpected behavior.
+[debug] [2020-05-07T10:57:21.668Z] [hub] writing locator at C:\Users\firm\AppData\Local\Temp\hub-freight-f4226.json
+[info] +  hub: emulator hub started at http://localhost:4400
+[warn] !  Your requested "node" version "8" doesn't match your global version "13"
+[info] +  functions: functions emulator started at http://localhost:5001
+[info] i  functions: Watching "C:\Users\firm\Documents\freight-user\functions" for Cloud Functions...
+[debug] [2020-05-07T10:57:23.705Z] [worker-pool] addWorker(~diagnostic~) 
+[debug] [2020-05-07T10:57:23.705Z] [worker-pool] Adding worker with key ~diagnostic~, total=1 
+[debug] [2020-05-07T10:57:23.705Z] [worker-pool] submitWork(triggerId=) 
+[debug] [2020-05-07T10:57:23.706Z] [worker-~diagnostic~-adbb5ca1-e5dd-426e-807e-f9661808d1c9]: Assigning socketPath: \\?\pipe\C:\Users\firm\Documents\freight-user\functions\24292 
+[debug] [2020-05-07T10:57:23.708Z] [worker-~diagnostic~-adbb5ca1-e5dd-426e-807e-f9661808d1c9]: BUSY 
+[debug] [2020-05-07T10:57:24.175Z] [runtime-status] [24292] Functions runtime initialized. {"cwd":"C:\\Users\\firm\\Documents\\freight-user\\functions","node_version":"13.0.1"} 
+[debug] [2020-05-07T10:57:24.176Z] [runtime-status] [24292] Disabled runtime features: undefined 
+[debug] [2020-05-07T10:57:24.180Z] [runtime-status] [24292] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.10.0","resolution":"C:\\Users\\firm\\Documents\\freight-user\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-07T10:57:24.182Z] [runtime-status] [24292] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.5.0","resolution":"C:\\Users\\firm\\Documents\\freight-user\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-07T10:57:24.184Z] [runtime-status] [24292] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] 
+[debug] [2020-05-07T10:57:24.241Z] [runtime-status] [24292] Checked functions.config() {"config":{}} 
+[debug] [2020-05-07T10:57:24.241Z] [runtime-status] [24292] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.5.0","resolution":"C:\\Users\\firm\\Documents\\freight-user\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-07T10:57:24.243Z] [runtime-status] [24292] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.10.0","resolution":"C:\\Users\\firm\\Documents\\freight-user\\functions\\node_modules\\firebase-admin\\lib\\index.js"} 
+[debug] [2020-05-07T10:57:24.243Z] [runtime-status] [24292] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.5.0","resolution":"C:\\Users\\firm\\Documents\\freight-user\\functions\\node_modules\\firebase-functions\\lib\\index.js"} 
+[debug] [2020-05-07T10:57:24.243Z] [runtime-status] [24292] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.10.0","resolution":"C:\\Users\\firm\\Documents\\freight-user\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} 
+[info] +  functions[getPrice]: http function initialized (http://localhost:5001/freight-f4226/us-central1/getPrice).
+[info] +  emulators: All emulators started, it is now safe to connect.
+[debug] [2020-05-07T10:57:24.272Z] [worker-~diagnostic~-adbb5ca1-e5dd-426e-807e-f9661808d1c9]: IDLE 

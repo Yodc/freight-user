@@ -1,3 +1,13 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
 .form-head {
   font-size: 1.5rem;
 }
@@ -98,6 +108,18 @@
 .no-style {
   list-style: none;
 }
+.circle-btn {
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.circle-btn:hover {
+  border-color: #1abc9c !important;
+  color: #159a80 !important;
+}
 .myAlert {
   top: 68px;
   position: fixed;
@@ -105,4 +127,13 @@
 }
 .email-p {
   padding-inline-start: 55px;
+}
+.highlight {
+  z-index: 1050;
+}
+.ui-state-active {
+  border: 1px solid #159a80 !important;
+  background: #1abc9c !important;
+  font-weight: normal !important;
+  color: #ffffff !important;
 }

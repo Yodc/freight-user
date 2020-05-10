@@ -1,26 +1,29 @@
 var db = firebase.firestore()
 var auth = firebase.auth()
 var storage = firebase.storage()
+var fn = firebase.functions()
 let ui = new firebaseui.auth.AuthUI(auth)
 var uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: function (authResult) {
       if (authResult.additionalUserInfo.isNewUser) {
         db.collection('users')
-          .doc(authResult.user.uid)
-          .set({
-            first_name: authResult.user.displayName.split(' ')[0],
-            last_name: authResult.user.displayName.split(' ')[1],
-            tel: authResult.user.phoneNumber,
-            role: 'customer',
-            status: 'nodata',
+          .doc(auth.currentUser.uid)
+          .get()
+          .then(function (doc) {
+            $('#signup-company').val(doc.data().company_code)
+            $('#signup-first_name').val(doc.data().first_name)
+            $('#signup-last_name').val(doc.data().last_name)
+            $('#signup-tel').val(doc.data().tel)
+            storage.ref().child(`company/${doc.data().company_code}`)
           })
-        storage.ref().child(`users/${auth.currentUser.uid}`)
-        db.collection('status').doc(authResult.user.uid).set({
-          booking: null,
-        })
+        $('#login-modal').modal('hide')
+        $('#signup-modal').modal('show')
+        $('#signup-title').html('Set Profile')
+        $('.notProfile').remove()
+        $('#signup-submit').html('Set Profile')
       }
-      $('#login-modal').modal('hide')
+
       return true
     },
 
@@ -41,7 +44,8 @@ var uiConfig = {
 }
 ui.start('#firebaseui-auth-container', uiConfig)
 // login
-$('#profile-nav').hide()
+$('.hidden-link').hide()
+
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     db.collection('users')
@@ -54,11 +58,15 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#getQuoteNow').removeClass('btn-primary')
         $('#getBookingNow').removeClass('hide')
         $('#profile-nav').show()
-        $('#login-nav').hide()
+        if (!doc.data().company_code) {
+          user.delete()
+        }
+        localStorage.setItem('company_code', doc.data().company_code)
       })
   } else {
+    console.log('no user')
+    localStorage.clear()
     // No user is signed in.
-    $('#profile-nav').hide()
     $('#login-nav').show()
   }
 })
