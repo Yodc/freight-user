@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/stuehler/jsPDF-CustomFonts-support/master/dist/default_vfs.js"></script>
+
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script type="text/javascript" src='invoicePDF.js'></script>
+    <style>
+        #table-desc{
+            width: 50%;
+        }
+    </style>
+
+</head>
+<body>
+    <button id ="pdf">Pdf</button>
+    <div id="div-tatble">
+        <table id="table-1">
+            <tr>
+                <td>FEEDER VESSEL : 
+                    <br>
+                    OCEAN VESSEL : KATA
+                    <br>
+                    OCEAN VESSEL : KATA
+                    <br>
+                    ETD : AFDA F 
+                    <br>
+                    ETA : fadf asffa aafaf
+                    <br>
+                    PORT OF LANDING :
+                    <br>
+                    FORT OF DELIVERY :
+                </td>
+                <td>
+                    PKG/WT/MEAS:
+                    <br>
+                    2 asdasd/ 1asasdsad
+                    <br>
+                    1221 wg
+                    <br>
+                    adssa CBM
+                </td>
+            </tr>
+        </table>
+
+        <table id="table-2">
+            <tr>
+                <td>CONTAINER NO./SEAL : (CFS/CFS)</td>
+            </tr>
+        </table>
+
+        <table id="table-3">
+            <tr>
+                <th id="table-desc"> DESCRIPTION</th>
+                <th> NON VAT</th>
+                <th> VAT </th>
+            </tr>
+            <tr>
+                <td>adas                                        asffasfafafafsasf</td>
+                <td></td>
+                <td>1000</td>
+            </tr>
+
+        </table>
+
+        <table id="table-4">
+            <tr>
+                <td>
+                    SUB-TOTAL
+                    <br>
+                    VAT 7%
+                    <br>
+                    TOTAL DUE IN THAI BATH
+                </td>
+                <td>
+                    62.2
+                    <br>
+                    5115
+                    <br>
+                </td>
+                <td>
+                    111
+                    <br>
+                    2222
+                    <br>
+                    1111111
+                </td>
+            </tr>
+        </table>
+            
+    </div>
+    <script type="text/javascript" src="dist/jspdf.min.js"></script>
+    <script type="text/javascript" src="dist/jspdf.customfonts.min.js"></script>
+    <script language="javascript" type="text/javascript" src="defaultVFS.js"></script>
+
+
+    <script src="dist/jspdf.plugin.autotable.js"></script>
+
+</body>
+</html>

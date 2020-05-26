@@ -45,71 +45,72 @@ getStatus = (option) => {
   $('.is-active').removeClass('is-active')
   $('.is-complete').removeClass('is-complete')
   let statusRef = db.collection('status')
-  showStatus = () => {
-    switch (doc.data().status) {
+  showStatus = (doc) => {
+    let { status, booking, appointment } = doc.data()
+    switch (status) {
       case 'booking':
-        db.collection('status')
-          .doc(auth.currentUser.uid)
-          .get()
-          .then(function (doc) {
-            $('.status_loading').addClass('hide')
-            $('#status-card').removeClass('hide')
-            let data = doc.data().booking
-            $('#getBooking').addClass(`hide`)
-            $('#nodata').addClass('is-active')
-            $('#nodata').html('<span>Booking Detail</span>')
-            $('#bookingDetail').removeClass('hide')
-            $('.bookingContainer').empty()
+        $('.status_loading').addClass('hide')
+        $('#status-card').removeClass('hide')
+        $('#getBooking').addClass(`hide`)
+        $('#nodata').addClass('is-active')
+        $('#nodata').html('<span>Booking Detail</span>')
+        $('#bookingDetail').removeClass('hide')
+        $('.bookingContainer').empty()
+        addCard(
+          'cube',
+          `Dimention`,
+          `${booking.width} x ${booking.height} x ${booking.length} cm`,
+          '.bookingContainer'
+        )
+        addCard(
+          'boxes',
+          `Quantity`,
+          `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+          '.bookingContainer'
+        )
+        addCard('weight', `Weight`, `${booking.weight} kgs`, '.bookingContainer')
+        addCard(
+          'road',
+          `Transport Type`,
+          `${capitalizeFirstLetter(booking.package_type)}`,
+          '.bookingContainer'
+        )
+        addCard(
+          'check-circle',
+          `Incoterms`,
+          `${capitalizeFirstLetter(booking.incoterms)}`,
+          '.bookingContainer'
+        )
+        addCard(
+          'paper-plane',
+          `Origin - Destination`,
+          `${booking.origin} - ${booking.destination}`,
+          '.bookingContainer'
+        )
+        addCard('calendar-alt', `Estimate Time Departure`, `${booking.etd}`, '.bookingContainer')
+        storage
+          .ref()
+          .child(`company/${doc.id}/booking/packing_list.pdf`)
+          .getDownloadURL()
+          .then((url) => {
             addCard(
-              'cube',
-              `Dimention`,
-              `${data.width} x ${data.height} x ${data.length} cm`,
+              'file-archive',
+              `Packing List`,
+              `<a type="button" role="button" href="${url}" target="_blank" class="btn btn-primary btn-block">Download</a>`,
               '.bookingContainer'
             )
+          })
+        storage
+          .ref()
+          .child(`company/${doc.id}/booking/invoice.pdf`)
+          .getDownloadURL()
+          .then((url) => {
             addCard(
-              'boxes',
-              `Quantity`,
-              `${data.quantity} ${capitalizeFirstLetter(data.package_type)}`,
+              'file-invoice',
+              `Invoice`,
+              `<a type="button" role="button" href="${url}" target="_blank" class="btn btn-primary btn-block">Download</a>`,
               '.bookingContainer'
             )
-            addCard('weight', `Weight`, `${data.weight} kgs`, '.bookingContainer')
-            addCard(
-              'road',
-              `Transport Type`,
-              `${capitalizeFirstLetter(data.package_type)}`,
-              '.bookingContainer'
-            )
-            addCard(
-              'paper-plane',
-              `Origin - Destination`,
-              `${data.origin} - ${data.destination}`,
-              '.bookingContainer'
-            )
-            addCard('calendar-alt', `Estimate Time Departure`, `${data.etd}`, '.bookingContainer')
-            storage
-              .ref()
-              .child(`users/${auth.currentUser.uid}/booking/packing_list.pdf`)
-              .getDownloadURL()
-              .then((url) => {
-                addCard(
-                  'file-archive',
-                  `Packing List`,
-                  `<a type="button" role="button" href="${url}" target="_blank" class="btn btn-primary btn-block">Download</a>`,
-                  '.bookingContainer'
-                )
-              })
-            storage
-              .ref()
-              .child(`users/${auth.currentUser.uid}/booking/invoice.pdf`)
-              .getDownloadURL()
-              .then((url) => {
-                addCard(
-                  'file-invoice',
-                  `Invoice`,
-                  `<a type="button" role="button" href="${url}" target="_blank" class="btn btn-primary btn-block">Download</a>`,
-                  '.bookingContainer'
-                )
-              })
           })
 
         break
@@ -117,174 +118,177 @@ getStatus = (option) => {
         $('#nodata').addClass('is-complete')
         $('#appointment').addClass('is-active')
         $('#appointmentDetail').removeClass('hide')
-        db.collection('status')
-          .doc(auth.currentUser.uid)
-          .get()
-          .then(function (doc) {
-            $('.status_loading').addClass('hide')
-            $('#getBooking').addClass(`hide`)
-            $('#status-card').removeClass('hide')
-            let data = doc.data().appointment
-            let booking = doc.data().booking
-            $('#nodata').addClass('is-complete')
-            $('#appointment').addClass('is-active')
-            $('#confirmAppointment').removeClass('hide')
-            switch (booking.transport_type) {
-              case 'air':
-                addCard('hashtag', `Booking Id`, `${data.booking_no}`, '.appointmentContainer')
-                addCard('building', `Company Name`, `${data.company_name}`, '.appointmentContainer')
-                addCard(
-                  'paper-plane',
-                  `Origin - Destination`,
-                  `${booking.origin} - ${booking.destination}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'calendar-check',
-                  `ETD - ETA`,
-                  `${data.etd} - ${data.eta}`,
-                  '.appointmentContainer'
-                )
-                addCard('plane', `Fleight No`, `${data.flight_no}`, '.appointmentContainer')
-                addCard(
-                  'cube',
-                  `Volume`,
-                  `${(booking.width * booking.height * booking.length) / 6000} CBM`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'boxes',
-                  `Quantity`,
-                  `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
-                  '.appointmentContainer'
-                )
-                addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
-                addCard(
-                  'plane-departure',
-                  `Loading At`,
-                  `${data.loading_at}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'calendar-week',
-                  `Loading date`,
-                  `${data.loading_date}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'user-tie',
-                  `Loading Contact`,
-                  `${data.contact_name} - ${data.contact_tel}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'id-card',
-                  `Transport Contact`,
-                  `${data.transporter_name} - ${data.transporter_tel}`,
-                  '.appointmentContainer'
-                )
-                break
-              case 'sea':
-                addCard('building', `Company Name`, `${data.company_name}`, '.appointmentContainer')
-                addCard(
-                  'paper-plane',
-                  `Origin - Destination`,
-                  `${booking.origin} - ${booking.destination}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'calendar-check',
-                  `ETD - ETA`,
-                  `${data.etd} - ${data.eta}`,
-                  '.appointmentContainer'
-                )
-                addCard('ship', `Vessel Name`, `${data.vessel_name}`, '.appointmentContainer')
-                addCard(
-                  'cube',
-                  `Volume`,
-                  `${(booking.width * booking.height * booking.length) / 1000000} CBM`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'boxes',
-                  `Quantity`,
-                  `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
-                  '.appointmentContainer'
-                )
-                addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
-                addCard(
-                  'plane-departure',
-                  `Loading At`,
-                  `${data.loading_at}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'calendar-week',
-                  `Loading date`,
-                  `${data.loading_date}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'user-tie',
-                  `Loading Contact`,
-                  `${data.contact_name} - ${data.contact_tel}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'id-card',
-                  `Transport Contact`,
-                  `${data.transporter_name} - ${data.transporter_tel}`,
-                  '.appointmentContainer'
-                )
-                break
-              case 'land':
-                addCard(
-                  'paper-plane',
-                  `Origin - Destination`,
-                  `${booking.origin} - ${booking.destination}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'calendar-check',
-                  `ETD - ETA`,
-                  `${data.etd} - ${data.eta}`,
-                  '.appointmentContainer'
-                )
-                addCard('car', `Car Register`, `${data.car_register}`, '.appointmentContainer')
-                addCard('hashtag', `Car Cassis`, `${data.car_cassis}`, '.appointmentContainer')
-                addCard('cogs', `Car Engine`, `${data.car_engine}`, '.appointmentContainer')
-                addCard('truck', `Car Type`, `${data.car_type}`, '.appointmentContainer')
-                addCard(
-                  'car-crash',
-                  `Car Insurance`,
-                  `${data.car_insurance}`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'cube',
-                  `Volume`,
-                  `${(booking.width * booking.height * booking.length) / 1000000} CBM`,
-                  '.appointmentContainer'
-                )
-                addCard(
-                  'boxes',
-                  `Quantity`,
-                  `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
-                  '.appointmentContainer'
-                )
-                addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
-                addCard(
-                  'user',
-                  `Driver`,
-                  `${data.car_driver} - ${data.car_tel}`,
-                  '.appointmentContainer'
-                )
+        $('.status_loading').addClass('hide')
+        $('#getBooking').addClass(`hide`)
+        $('#status-card').removeClass('hide')
+        $('#nodata').addClass('is-complete')
+        $('#appointment').addClass('is-active')
+        $('#confirmAppointment').removeClass('hide')
+        switch (booking.transport_type) {
+          case 'air':
+            addCard('hashtag', `Booking Id`, `${appointment.booking_no}`, '.appointmentContainer')
+            addCard(
+              'building',
+              `Company Name`,
+              `${appointment.company_name}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'paper-plane',
+              `Origin - Destination`,
+              `${booking.origin} - ${booking.destination}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'calendar-check',
+              `ETD - ETA`,
+              `${appointment.etd} - ${appointment.eta}`,
+              '.appointmentContainer'
+            )
+            addCard('plane', `Fleight No`, `${appointment.flight_no}`, '.appointmentContainer')
+            addCard(
+              'cube',
+              `Volume`,
+              `${(booking.width * booking.height * booking.length) / 6000} CBM`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'boxes',
+              `Quantity`,
+              `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+              '.appointmentContainer'
+            )
+            addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
+            addCard(
+              'plane-departure',
+              `Loading At`,
+              `${appointment.loading_at}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'calendar-week',
+              `Loading date`,
+              `${appointment.loading_date}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'user-tie',
+              `Loading Contact`,
+              `${appointment.contact_name} - ${appointment.contact_tel}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'id-card',
+              `Transport Contact`,
+              `${appointment.transporter_name} - ${appointment.transporter_tel}`,
+              '.appointmentContainer'
+            )
+            break
+          case 'sea':
+            addCard(
+              'building',
+              `Company Name`,
+              `${appointment.company_name}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'paper-plane',
+              `Origin - Destination`,
+              `${booking.origin} - ${booking.destination}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'calendar-check',
+              `ETD - ETA`,
+              `${appointment.etd} - ${appointment.eta}`,
+              '.appointmentContainer'
+            )
+            addCard('ship', `Vessel Name`, `${appointment.vessel_name}`, '.appointmentContainer')
+            addCard(
+              'cube',
+              `Volume`,
+              `${(booking.width * booking.height * booking.length) / 1000000} CBM`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'boxes',
+              `Quantity`,
+              `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+              '.appointmentContainer'
+            )
+            addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
+            addCard(
+              'plane-departure',
+              `Loading At`,
+              `${appointment.loading_at}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'calendar-week',
+              `Loading date`,
+              `${appointment.loading_date}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'user-tie',
+              `Loading Contact`,
+              `${appointment.contact_name} - ${appointment.contact_tel}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'id-card',
+              `Transport Contact`,
+              `${appointment.transporter_name} - ${appointment.transporter_tel}`,
+              '.appointmentContainer'
+            )
+            break
+          case 'land':
+            addCard(
+              'paper-plane',
+              `Origin - Destination`,
+              `${booking.origin} - ${booking.destination}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'calendar-check',
+              `ETD - ETA`,
+              `${appointment.etd} - ${appointment.eta}`,
+              '.appointmentContainer'
+            )
+            addCard('car', `Car Register`, `${appointment.car_register}`, '.appointmentContainer')
+            addCard('hashtag', `Car Cassis`, `${appointment.car_cassis}`, '.appointmentContainer')
+            addCard('cogs', `Car Engine`, `${appointment.car_engine}`, '.appointmentContainer')
+            addCard('truck', `Car Type`, `${appointment.car_type}`, '.appointmentContainer')
+            addCard(
+              'car-crash',
+              `Car Insurance`,
+              `${appointment.car_insurance}`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'cube',
+              `Volume`,
+              `${(booking.width * booking.height * booking.length) / 1000000} CBM`,
+              '.appointmentContainer'
+            )
+            addCard(
+              'boxes',
+              `Quantity`,
+              `${booking.quantity} ${capitalizeFirstLetter(booking.package_type)}`,
+              '.appointmentContainer'
+            )
+            addCard('weight', `Weight`, `${booking.weight} kgs`, '.appointmentContainer')
+            addCard(
+              'user',
+              `Driver`,
+              `${appointment.car_driver} - ${appointment.car_tel}`,
+              '.appointmentContainer'
+            )
 
-                break
-              default:
-                break
-            }
-          })
+            break
+          default:
+            break
+        }
         break
       case 'invoice':
         storage
@@ -333,7 +337,7 @@ getStatus = (option) => {
       .doc(option.trackingID)
       .get()
       .then((doc) => {
-        showStatus()
+        showStatus(doc)
       })
       .catch((err) => {
         console.log(err)
@@ -343,115 +347,116 @@ getStatus = (option) => {
       .where('company', '==', localStorage.getItem('company_code'))
       .get()
       .then((querySnapshot) => {
-        querySnapshot.docs[0].get().then((doc) => {
-          if (option.type === 'user' && doc.exist) {
-            let date = new Date()
-            $('#booking_etd').attr(
-              'min',
-              `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
-            )
-            if (fillData) {
-              $('#booking_width').val($('#width').val())
-              $('#booking_height').val($('#height').val())
-              $('#booking_length').val($('#length').val())
-              $('#booking_quantity').val($('#quantity').val())
-              $('#booking_weight').val($('#weight').val())
-              $('.booking-card').removeClass('active')
-              $(`#${$('type-card.active').attr('id').split('-')[0]}-booking-card`).addClass(
-                'active'
-              )
+        if (option.type === 'user' && querySnapshot.size === 0) {
+          let date = new Date()
+          $('#booking_etd').attr(
+            'min',
+            `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
+          )
+          if (option.fillData) {
+            $('#booking_width').val($('#width').val())
+            $('#booking_height').val($('#height').val())
+            $('#booking_length').val($('#length').val())
+            $('#booking_quantity').val($('#quantity').val())
+            $('#booking_weight').val($('#weight').val())
+            $('.booking-card').removeClass('active')
+            $(`#${$('type-card.active').attr('id').split('-')[0]}-booking-card`).addClass('active')
+          }
+          $('#booking_eta').attr('min', new Date())
+          $('#getBooking').removeClass(`hide`)
+          $('.status_loading').addClass('hide')
+          $('#status-card').removeClass('hide')
+          $('#nodata').addClass('is-active')
+          $('#newbooking').removeClass('hide')
+          $('#air-swap').click(() => {
+            $('.thai-air').empty()
+            $('.inter-air').empty()
+            $('.air-from').toggleClass('thai-air')
+            $('.air-from').toggleClass('inter-air')
+            $('.air-to').toggleClass('thai-air')
+            $('.air-to').toggleClass('inter-air')
+            db.collection('air')
+              .orderBy('air_name')
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (document) {
+                  $('.inter-air').append(
+                    `<option value="${document.id}">${document.data().air_name}</option>`
+                  )
+                })
+                $('.thai-air').append(`<option value="thai">Bangkok,Thailand</option>`)
+              })
+          })
+          $('#sea-swap').click(() => {
+            $('.thai-sea').empty()
+            $('.inter-sea').empty()
+            $('.sea-from').toggleClass('thai-sea')
+            $('.sea-from').toggleClass('inter-sea')
+            $('.sea-to').toggleClass('thai-sea')
+            $('.sea-to').toggleClass('inter-sea')
+            db.collection('sea')
+              .orderBy('sea_name')
+              .get()
+              .then(function (querySnapshot) {
+                querySnapshot.forEach(function (document) {
+                  $('.inter-sea').append(
+                    `<option value="${document.id}">${document.data().sea_name}</option>`
+                  )
+                })
+                $('.thai-sea').append(`<option value="thai">Khlong Toei Pier,Thailand</option>`)
+                $('.thai-sea').append(`<option value="thai">Laemchabang Port,Thailand</option>`)
+              })
+          })
+          $('#getBooking').on('click', function () {
+            let transport_type = $('.booking-card.active').attr('id').split('-')[0]
+            let origin, destination
+            switch (transport_type) {
+              case 'air':
+                origin = $('.air-from option').filter(':selected').text()
+                destination = $('.air-to option').filter(':selected').text()
+                break
+              case 'sea':
+                origin = $('.sea-from option').filter(':selected').text()
+                destination = $('.sea-to option').filter(':selected').text()
+                break
+              case 'land':
+                origin = $('#ip-from').val()
+                destination = $('#ip-to').val()
+                break
+              default:
+                break
             }
-            $('#booking_eta').attr('min', new Date())
-            $('#getBooking').removeClass(`hide`)
-            $('.status_loading').addClass('hide')
-            $('#status-card').removeClass('hide')
-            $('#nodata').addClass('is-active')
-            $('#newbooking').removeClass('hide')
-            $('#air-swap').click(() => {
-              $('.thai-air').empty()
-              $('.inter-air').empty()
-              $('.air-from').toggleClass('thai-air')
-              $('.air-from').toggleClass('inter-air')
-              $('.air-to').toggleClass('thai-air')
-              $('.air-to').toggleClass('inter-air')
-              db.collection('air')
-                .orderBy('air_name')
+            randID = () => {
+              return (Math.floor(Math.random() * 1000000) + 1000000).toString().substring(1)
+            }
+            getID = (num) => {
+              return db
+                .collection('status')
                 .get()
-                .then(function (querySnapshot) {
-                  querySnapshot.forEach(function (document) {
-                    $('.inter-air').append(
-                      `<option value="${document.id}">${document.data().air_name}</option>`
-                    )
+                .then((querySnapshot) => {
+                  let all_status_id = []
+                  querySnapshot.forEach((document) => {
+                    all_status_id.push(document.id)
                   })
-                  $('.thai-air').append(`<option value="thai">Bangkok,Thailand</option>`)
+                  isSame = (data) => {
+                    return all_status_id.some((val) => val === data) ? isSame(randID()) : data
+                  }
+                  return isSame(num)
                 })
-            })
-            $('#sea-swap').click(() => {
-              $('.thai-sea').empty()
-              $('.inter-sea').empty()
-              $('.sea-from').toggleClass('thai-sea')
-              $('.sea-from').toggleClass('inter-sea')
-              $('.sea-to').toggleClass('thai-sea')
-              $('.sea-to').toggleClass('inter-sea')
-              db.collection('sea')
-                .orderBy('sea_name')
-                .get()
-                .then(function (querySnapshot) {
-                  querySnapshot.forEach(function (document) {
-                    $('.inter-sea').append(
-                      `<option value="${document.id}">${document.data().sea_name}</option>`
-                    )
-                  })
-                  $('.thai-sea').append(`<option value="thai">Khlong Toei Pier,Thailand</option>`)
-                  $('.thai-sea').append(`<option value="thai">Laemchabang Port,Thailand</option>`)
-                })
-            })
-            $('#booking-submit').on('click', function () {
-              let transport_type = $('.booking-card.active').attr('id').split('-')[0]
-              let origin, destination
-              switch (transport_type) {
-                case 'air':
-                  origin = $('.air-from option').filter(':selected').text()
-                  destination = $('.air-to option').filter(':selected').text()
-                  break
-                case 'sea':
-                  origin = $('.sea-from option').filter(':selected').text()
-                  destination = $('.sea-to option').filter(':selected').text()
-                  break
-                case 'land':
-                  origin = $('#ip-from').val()
-                  destination = $('#ip-to').val()
-                  break
-                default:
-                  break
-              }
-              randID = () => {
-                return `JN-${(Math.floor(Math.random() * 10000) + 10000).toString().substring(1)}`
-              }
-              getID = (num) => {
-                let temp = num
-                return db
-                  .collection('status')
-                  .get()
-                  .then((querySnapshot) => {
-                    querySnapshot.forEach((document) => {
-                      temp = document.id !== temp ? temp : getID(randID())
-                    })
-                    return temp
-                  })
-              }
-              let id = getID(randID())
+            }
+            getID(randID()).then((item) => {
               db.collection('status')
-                .doc(id)
-                .update({
+                .doc(item)
+                .set({
                   status: 'booking',
-                  company: doc.data().company_code,
+                  company: localStorage.getItem('company_code'),
                   booking: {
                     width: parseFloat($('#booking_width').val()),
                     height: parseFloat($('#booking_height').val()),
                     length: parseFloat($('#booking_length').val()),
                     quantity: parseFloat($('#booking_quantity').val()),
                     weight: parseFloat($('#booking_weight').val()),
+                    incoterms: $('#incoterms').val(),
                     package_type: $('.booking-type.active').attr('value'),
                     transport_type,
                     origin,
@@ -467,30 +472,28 @@ getStatus = (option) => {
                 })
               storage
                 .ref()
-                .child(`company/${id}/booking/packing_list.pdf`)
+                .child(`company/${item}/booking/packing_list.pdf`)
                 .put($('#booking_packing_list').get(0).files[0])
               storage
                 .ref()
-                .child(`company/${id}/booking/invoice.pdf`)
+                .child(`company/${item}/booking/invoice.pdf`)
                 .put($('#booking_invoice').get(0).files[0])
               $('#status-modal').modal('hide')
             })
-            return
-          }
-          showStatus()
-        })
-      })
-      .catch((err) => {
-        console.log(err)
+          })
+          return
+        } else {
+          showStatus(querySnapshot.docs[0])
+        }
       })
   }
 }
 getProfile = () => {
   $('#signup-modal').modal('show')
+  $('#profile-submit').attr('id', 'profile-submit')
   $('#signup-title').html('Update Profile')
   $('.notProfile').remove()
   $('#signup-submit').html('Update Profile')
-
   db.collection('users')
     .doc(auth.currentUser.uid)
     .get()
@@ -507,21 +510,47 @@ $('#alert-close').on('click', function () {
 })
 $('#signup-company').keyup(function () {
   if ($(this).val().length === 6) {
-    db.collection('otp')
-      .doc($('#signup-company').val())
+    db.collection('company')
+      .where('otp', '==', $(this).val())
       .get()
       .then((doc) => {
-        if (doc.exist) {
-          $('#found_company').class('text-success')
-          $('#found_company').html(doc.data().to)
+        if (!doc.empty) {
+          console.log()
+
+          $('#found_company').attr('class', 'text-success')
+          $('#found_company').html(doc.docs[0].data().company_name)
         } else {
-          $('#found_company').class('text-muted')
+          $('#found_company').attr('class', 'text-muted')
           $('#found_company').html('None')
         }
       })
   }
 })
+$('#profile-company').keyup(function () {
+  if ($(this).val().length === 6) {
+    db.collection('company')
+      .where('otp', '==', $(this).val())
+      .get()
+      .then((doc) => {
+        console.log(doc)
 
+        if (!doc.empty) {
+          console.log(doc.docs[0].data().company_name)
+
+          $('#found_otp').attr('class', 'text-success')
+          $('#found_otp').html(doc.docs[0].data().company_name)
+        } else {
+          console.log('nodata')
+
+          $('#found_otp').attr('class', 'text-muted')
+          $('#found_otp').html('None')
+        }
+      })
+  }
+})
+$('#loginButton').on('click', function () {
+  auth.signInWithEmailAndPassword($('#login').val(), $('#password').val())
+})
 $('#getBooking').on('click', function () {
   let condition =
     $('#booking_width').val().length !== 0 &&
@@ -564,24 +593,53 @@ $('.quoteInput').keyup(function () {
     $('.quoteHelp').addClass('text-muted')
   }
 })
+$('#profile-submit').on('click', function () {
+  db.collection('company')
+    .where('otp', '==', $('#profile-company').val())
+    .get()
+    .then((doc) => {
+      db.collection('users')
+        .doc(auth.currentUser.uid)
+        .set({
+          first_name: $('#profile-first_name').val(),
+          last_name: $('#profile-last_name').val(),
+          company_code: doc.docs[0].id,
+          tel: $('#profile-tel').val(),
+        })
+        .then(function () {
+          alertMessage('Update Profile Complete', 'success')
+          $('#profile-modal').modal('hide')
+        })
+        .catch(function (error) {
+          alertMessage(error, 'danger')
+          $('#profile-modal').modal('hide')
+        })
+    })
+})
 $('#signup-submit').on('click', function () {
-  e.preventDefault()
-  db.collection('users')
-    .doc(auth.currentUser.uid)
-    .update({
-      first_name: $('#signup-first_name').val(),
-      last_name: $('#signup-last_name').val(),
-      company_code: $('#signup-company').val(),
-      tel: $('#signup-tel').val(),
-    })
-    .then(function () {
-      alertMessage('Update Profile Complete', 'success')
-      $('#signup-modal').modal('hide')
-    })
-    .catch(function (error) {
-      alertMessage(error, 'danger')
-      $('#signup-modal').modal('hide')
-    })
+  auth.createUserWithEmailAndPassword('#signup-email'.val(), '#signup-password'.val()).then(() => {
+    db.collection('company')
+    where('otp', '==', $('#signup-company').val())
+      .get()
+      .then((doc) => {
+        db.collection('users')
+          .doc(auth.currentUser.uid)
+          .set({
+            first_name: $('#signup-first_name').val(),
+            last_name: $('#signup-last_name').val(),
+            company_code: doc.docs[0].id,
+            tel: $('#signup-tel').val(),
+          })
+          .then(function () {
+            alertMessage('Update Profile Complete', 'success')
+            $('#signup-modal').modal('hide')
+          })
+          .catch(function (error) {
+            alertMessage(error, 'danger')
+            $('#signup-modal').modal('hide')
+          })
+      })
+  })
 })
 $('#sentform').on('click', function () {
   getPrice(
@@ -593,23 +651,60 @@ $('#sentform').on('click', function () {
       weight: $('#weight').val(),
       type: $('.type-card.active').attr('id').split('-')[0],
     },
-    { price: '#quoteprice', card: 'quoteform', swap: 'packageform' }
+    { price: '#quoteprice', card: '#quoteform', swap: '#packageform' }
   )
   var elem = document.getElementById('quote')
   elem.scrollIntoView()
+})
+$('#sentContact').on('click', function () {
+  let origin, destination
+  switch (transport_type) {
+    case 'air':
+      origin = $('.cair-from option').filter(':selected').text()
+      destination = $('.cair-to option').filter(':selected').text()
+      break
+    case 'sea':
+      origin = $('.csea-from option').filter(':selected').text()
+      destination = $('.csea-to option').filter(':selected').text()
+      break
+    case 'land':
+      origin = $('#cip-from').val()
+      destination = $('#cip-to').val()
+      break
+    default:
+      break
+  }
+  db.collection('quote').add({
+    first_name: $('#contact_first').val(),
+    last_name: $('#contact_last').val(),
+    company: $('#contact_company').val(),
+    email: $('#contact_email').val(),
+    phone: $('#contact_phone').val(),
+    detail: {
+      width: $('#contact_width').val(),
+      height: $('#contact_height').val(),
+      length: $('#contact_length').val(),
+      quantity: $('#contact_quantity').val(),
+      weight: $('#contact_weight').val(),
+      package_type: $('.contact-type.active').attr('id').split('-')[0],
+      origin,
+      destination,
+      transport_type: $('.contact-card.active').attr('id').split('-')[0],
+    },
+  })
 })
 $('#price-back').click(() => {
   $('#packageform').removeClass('hide')
   $('#quoteform').addClass('hide')
 })
+$('#contract-back').click(() => {
+  $('#completeContact').removeClass('hide')
+  $('#contactform').addClass('hide')
+})
 $('#getBookingNow').on('click', function () {
   getStatus({ type: 'user' })
 })
 $('#profiles').on('click', function (e) {
-  getProfile()
-})
-$('#toProfile').on('click', function (e) {
-  $('#status-modal').modal('hide')
   getProfile()
 })
 $('#status').on('click', function () {

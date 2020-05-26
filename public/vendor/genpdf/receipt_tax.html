@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/stuehler/jsPDF-CustomFonts-support/master/dist/default_vfs.js"></script>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script type="text/javascript" src='recievptPDF.js'></script>
+    <style>
+        #table-1{
+            font-family:Arial
+        }
+    </style>
+
+</head>
+<body>
+    <button id ="pdf">Pdf</button>
+    <div id="div-tatble">
+        <table id="table-1">
+            <tr>
+                <td>
+                    /Received From : dfslalskadsmlkmadslkadasd
+                    <br>
+                    46/6
+                    <br>
+                    asdadssad
+                    <br>
+                    adafafsafsaeghd
+                    <br>
+                    asddasas 
+                </td>
+                <td>
+                    เลขที่/number : Rs1111
+                    <br> 
+                    Date : 1/1/2020
+                </td>
+            </tr>
+        </table>
+
+        <table id="table-2">
+            <tr>
+                <th> ลำดับที/No.</th>
+                <th> รายการ/Description</th>
+                <th> จำนวนเงิน/GROSS AMT.</th>
+                <th> ภาษีมูลค่าเพิ่ม/VAT AMT.</th>
+                <th> จำนวนเงินรวม\TOTAL AMT.</th>
+            </tr>
+            <tr>
+                <td>
+                    1.
+                    <br>
+                    2.
+                </td>
+                <td>
+                    ใบแจ้ง 1
+                    <br>
+                    ใบแจ้ง 2
+                </td>
+                <td>
+                    101010
+                    <br>
+                    202020
+                </td>
+                <td>
+                    303030
+                    <br>
+                    404040
+                </td>
+                <td>
+                    505050
+                    <br>
+                    606060
+                </td>
+            </tr>
+        </table>
+        <table id="table-2-foot">
+            <tr>
+                <td>
+                    รวาม(TOTAL)
+                </td>
+                <td>
+                    10.1010
+                </td>
+                <td>
+                    151
+                </td>
+                <td>
+                    515161
+                </td>
+            </tr>
+        </table>
+
+        <table id="table-3">
+            <tr>
+                <td>
+                    จำนวนเงินเป็นตัวอักษร  (BHT : TEN) <br> AMOUNT IN WORDS
+                </td>
+            </tr>
+        </table>
+
+        <table id="table-4">
+            <tr>
+                <td>
+                    ชำระเป็น  [    ]   เงินสด(CASH)<br>
+                            [   ] เงินโอน(TRANFER)<br>
+                            [   ] เช็ค(CHEQUE)    เลขที่เช็ค(CHEQUE NO.) __________________ ลงวันที่(DATED)__________________<br>
+                                                 ธนาคาร(BANK)__________________ สาขา __________________
+                </td>
+            </tr>
+        </table>
+
+        <table id="table-5">
+            <tr>
+                <td>
+                    <br>
+                    <br>
+                    _____________________________________
+                    <br>
+                    ผู้รับเงิน
+                </td>
+                <td>
+                    <br>
+                    <br>
+                    _____________________________________
+                    <br>
+                    ผู้มีอำนาจกระทำแทน
+                </td>
+            </tr>
+        </table>
+            
+    </div>
+    <script type="text/javascript" src="dist/jspdf.min.js"></script>
+    <script type="text/javascript" src="dist/jspdf.customfonts.min.js"></script>
+    <script language="javascript" type="text/javascript" src="defaultVFS.js"></script>
+
+
+    <script src="dist/jspdf.plugin.autotable.js"></script>
+
+</body>
+</html>

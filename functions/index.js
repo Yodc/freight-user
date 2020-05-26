@@ -1,40 +1,39 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const PdfPrinter = require('pdfmake')
 admin.initializeApp()
 const firestore = admin.firestore()
 const axios = require('axios')
 const cors = require('cors')({
   origin: true,
 })
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-exports.deleteOldItems = functions.firestore.document('/otp/{otpId}').onWrite((change, context) => {
-  var document = change.after.ref.parent // doc to the items
-  var now = Date.now() - 10 * 60 * 1000
-  var oldItemsQuery = document.orderByChild('timestamp').endAt(now)
-  return oldItemsQuery.once('value', (snapshot) => {
-    var updates = {}
-    snapshot.forEach((child) => {
-      updates[child.key] = null
-    })
-    return ref.update(updates)
-  })
-})
+exports.deleteOldItems = functions.firestore
+  .document('/company/{companyId}')
+  .onWrite((change, context) => {
+    var document = change.after.ref.parent // doc to the items
+    var now = Date.now() - 10 * 60 * 1000
+    var oldItemsQuery = document.where('timestamp', '<', now).orderBy('timestamp')
+    console.log(oldItemsQuery)
 
-exports.otpCompany = functions.https.onRequest(async (req, res) => {
+    return oldItemsQuery.get().then((snapshot) => {
+      return snapshot.forEach((child) => {
+        child.ref.update({ otp: null, timestamp: null })
+      })
+    })
+  })
+exports.otpCompany = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     if (req.method !== 'POST')
       return res.status(401).json({
         message: 'Not allowed',
       })
+    console.log(req.query.company)
     return firestore
-      .collection('otp')
-      .where('type', '==', 'company')
+      .collection('company')
       .get()
       .then((querySnapshot) => {
         randNum = () => {
-          return (Math.floor(Math.random() * 10000) + 10000).toString().substring(1)
+          return (Math.floor(Math.random() * 1000000) + 1000000).toString().substring(1)
         }
         getNum = (num) => {
           let temp = num
@@ -43,13 +42,13 @@ exports.otpCompany = functions.https.onRequest(async (req, res) => {
           })
           return temp
         }
-
-        firestore.collection('otp').add({
-          timestamp: new Date(),
-          otp: getNum(randNum()),
-          to: req.query.company,
-          type: 'company',
-        })
+        firestore
+          .collection('company')
+          .doc(req.query.company)
+          .update({
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            otp: getNum(randNum()),
+          })
         return res.status(201).json({
           success: 'success',
         })
@@ -61,7 +60,6 @@ exports.otpCompany = functions.https.onRequest(async (req, res) => {
       })
   })
 })
-
 exports.getPrice = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     if (req.method !== 'GET') {

@@ -32,6 +32,16 @@ input[type='number'] {
 .type-card:focus {
   border-color: #1abc9c;
 }
+.contact-card {
+  cursor: pointer;
+}
+.contact-card.active {
+  border-color: #1abc9c;
+}
+.contact-card:hover,
+.contact-card:focus {
+  border-color: #1abc9c;
+}
 .booking-card {
   cursor: pointer;
 }

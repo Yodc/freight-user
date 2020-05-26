@@ -14,11 +14,14 @@ service cloud.firestore {
    match /company/{userId}{
      allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
    }
-   match /income_monthly/{incomeId}{
+   match /income/{incomeId}{
      allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
    }
-   match /income_year/{incomeId}{
+   match /subcontact/{subcontactId}{
      allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+   match /{document=**} {
+    allow read, write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+   }
    }
    match /air/{document}{
      allow write:if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"

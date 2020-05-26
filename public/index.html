@@ -75,7 +75,7 @@
     </div>
   </nav>
   <div class="modal" tabindex="-1" role="dialog" id="login-modal">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content login-card">
         <div class="modal-header">
           <h5 class="modal-title" style="display: inline;">Login</h5>
@@ -84,9 +84,23 @@
           </button>
         </div>
         <div class="modal-body p-1">
-          <div id="firebaseui-auth-container"></div>
-          <div id="loader">Loading...</div>
+          <div class="row">
+            <div id="firebaseui-auth-container" class="col-6"></div>
+            <form id="login-form" class="col-6">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" autocomplete="email" class="form-control" id="email">
+              </div>
+              <div class="form-group">
+                <label for="password">password</label>
+                <input type="password" autocomplete="current-password" class="form-control" id="password">
+              </div>
+              <button type="button" id="loginButton" class="btn btn-primary">Login</button>
+            </form>
+            <div id="loader">Loading...</div>
+          </div>
         </div>
+
         <div class="modal-footer p-1">
           <div class="d-flex justify-content-center">
             Don't have an account?<a href="#" data-dismiss="modal" data-toggle="modal" data-target="#signup-modal"
@@ -121,7 +135,21 @@
                 Company Selected: <span id="found_company" class="text-muted">None</span>
               </small>
             </div>
-
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="text" class="form-control profileInput" autocomplete='email' id="signup-email"
+                aria-describedby="email">
+            </div>
+            <div class="form-group">
+              <label for="password" id="password">Password</label>
+              <input type="password" autocomplete='new-password' class="form-control profileInput" id="signup-password"
+                aria-describedby="password">
+            </div>
+            <div class="form-group">
+              <label for="con_pass" id="con_pass">Confirm Password</label>
+              <input type="password" autocomplete='new-password' class="form-control profileInput" id="signup-confirm"
+                aria-describedby="con_pass">
+            </div>
             <div class="form-group">
               <label for="firstName" id="firstName">First Name</label>
               <input type="text" class="form-control profileInput" id="signup-first_name" aria-describedby="first_name">
@@ -144,6 +172,51 @@
       </div>
     </div>
   </div>
+  <div class="modal" tabindex="-1" role="dialog" id="profile-modal">
+    <div class="modal-dialog  modal-dialog-scrollable  " role="document">
+      <div class="modal-content  login-card">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signup-title" style="display: inline;">Update Profile</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-1">
+          <small class="text-muted profileHelp">Please enter all form</small>
+          <form>
+            <div class="form-group" id="form-otp">
+              <label for="profile-otp" id="profile-otp">OTP
+                <i class="fas fa-info-circle text-muted" data-toggle="tooltip" data-placement="top"
+                  title="you can get company otp from your colleague or contact us"></i>
+              </label>
+              <input class="form-control profileInput" id="profile-company" aria-describedby="company" maxlength="6" />
+              <small id="company_code" class="form-text text-muted">
+                Company Selected: <span id="found_otp" class="text-muted">None</span>
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="firstName" id="firstName">First Name</label>
+              <input type="text" class="form-control profileInput" id="profile-first_name"
+                aria-describedby="first_name">
+            </div>
+            <div class="form-group">
+              <label for="lastName" id="lastName">Last Name</label>
+              <input type="text" class="form-control profileInput" id="profile-last_name" aria-describedby="last_name">
+            </div>
+            <div class="form-group">
+              <label for="telePhone" id="telePhone">Tel.</label>
+              <input type="text" class="form-control profileInput" id="profile-tel" aria-describedby="tel">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer p-1">
+          <div class="form-group">
+            <button id="profile-submit" type="button" class="btn btn-primary btn-lg btn-block ">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal" tabindex="-1" role="dialog" id="status-modal">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content login-card">
@@ -156,10 +229,11 @@
         <div class="modal-body">
           <div id='status-card' class="mb-3 mx-3 hide">
             <ol class="step-bar">
-              <li id="nodata"><span>Booking</span></li>
-              <li id="appointment"><span>Appointment</span></li>
-              <li id="invoice"><span>Invoice</span></li>
-              <li id="receipt"><span>Receipt</span></li>
+              <li id="nodata"><span>Order Created</span></li>
+              <li id="appointment"><span>Booking</span></li>
+              <li id="bl"><span>Departed</span></li>
+              <li id="invoice"><span>Arrived</span></li>
+              <li id="receipt"><span>Get Receipt</span></li>
             </ol>
           </div>
           <div class="status_loading">
@@ -250,14 +324,6 @@
                 <select class="custom-select air-to inter-air">
                 </select>
               </div>
-              <div class="form-group">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                  <label class="form-check-label" for="invalidCheck">
-                    Agree to terms and conditions
-                  </label>
-                </div>
-              </div>
             </div>
             <div class="form-row mx-2 input-tran hide" id="sea-trans">
               <div class="form-group col-md-5">
@@ -286,9 +352,41 @@
                 <textarea type="text" rows="3" class="form-control" id="ip-to"></textarea>
               </div>
             </div>
-            <div class="form-group mx-2">
-              <label for="exampleFormControlFile1">Estimate Time Departure</label>
-              <input type="date" class="form-control" id="booking_etd" min="2019-01-01">
+            <div class="form-row mx-2">
+              <div class="form-group col-md-3">
+                <label for="exampleFormControlFile1">Incoterms</label>
+                <select class="custom-select" id="incoterms">
+                  <option value=""></option>
+                  <option value="EXW">EXW</option>
+                  <option value="FCA">FCA</option>
+                  <option value="FAS">FAS</option>
+                  <option value="FOB">FOB</option>
+                  <option value="CFR">CFR</option>
+                  <option value="CIF">CIF</option>
+                  <option value="CPT">CPT</option>
+                  <option value="CIP">CIP</option>
+                  <option value="DAF">DAF</option>
+                  <option value="DES">DES</option>
+                  <option value="DEQ">DEQ</option>
+                  <option value="DDU">DDU</option>
+                  <option value="DDP">DDP</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="exampleFormControlFile1">Estimate Time Departure</label>
+                <input type="date" class="form-control" id="booking_etd" min="2019-01-01">
+              </div>
+
+            </div>
+            <div class="form-row mx-2">
+              <div class="form-group">
+                <label for="invoice">Invoice</label>
+                <input type="file" class="form-control-file" accept=".pdf" id="booking_invoice">
+              </div>
+              <div class="form-group">
+                <label for="packing_list">Packing List</label>
+                <input type="file" class="form-control-file" accept=".pdf" id="booking_packing_list">
+              </div>
             </div>
           </form>
           <div class="statusContent hide" id="bookingDetail">
@@ -348,7 +446,7 @@
           <p class="masthead-subheading font-weight-light mb-0">Find your forwarder partner now</p>
           <p class="masthead-subheading font-weight-light mb-0 ml-2">Tracking Status</p>
           <div class="input-group mb-3">
-            <input type="text" class="form-control" id="track-input" placeholder="Tracking Status"
+            <input type="number" class="form-control" id="track-input" placeholder="Tracking Status"
               aria-label="Tracking Status" aria-describedby="basic-addon2">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="button" id="tracking">Track</button>
@@ -633,113 +731,157 @@
         <div class="col-lg-8 mx-auto">
           <div class="card p-4">
             <form name="contactform" id="contactform" novalidate="novalidate">
-              <div class="form-head mb-2">Package Detail</div>
-              <div class="input-group form-group col-md-12">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" id="basic-addon1">Dimention(cm)</label>
-                </div>
-                <input type="number" class="form-control contactInput" placeholder="Width" aria-label="Width"
-                  id="contact_width">
-                <input type="number" class="form-control contactInput" placeholder="Height" aria-label="Height"
-                  id="contact_height">
-                <input type="number" class="form-control contactInput" placeholder="Length" aria-label="Length"
-                  id="contact_length">
-              </div>
+              <p class="mb-2">Contact Detail</p>
               <div class="form-row mx-2">
+                <div class="form-inline">
+                  <div class="form-group col-md-6">
+                    <label for="quantity">First Name</label>
+                    <input type="number" class="form-control contactInput" id="contact_first">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="quantity">Last Name</label>
+                    <input type="number" class="form-control contactInput" id="contact_last">
+                  </div>
+                </div>
                 <div class="form-group col-md-3">
-                  <label for="quantity">Quantity</label>
-                  <input type="number" class="form-control contactInput" id="contact_quantity">
+                  <label for="quantity">Company Name</label>
+                  <input type="number" class="form-control contactInput" id="contact_company">
                 </div>
-                <div class="form-group col-md-3">
-                  <label for="quantity">Weight(Kgs)</label>
-                  <input type="number" class="form-control contactInput" id="contact_weight">
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="to" class="d-block">Type</label>
-                  <div class="btn-group " role="group" aria-label="Basic example">
-                    <button type="button" value="Box"
-                      class="btn btn-secondary type-box contact-type active">Box</button>
-                    <button type="button" value="Carton"
-                      class="btn btn-secondary type-carton contact-type">Carton</button>
-                    <button type="button" value="Pallet"
-                      class="btn btn-secondary type-pallet contact-type">Pallet</button>
-                    <button type="button" value="Wooden case" class="btn btn-secondary type-wooden contact-type">Wooden
-                      case</button>
+                <div class="form-inline">
+                  <div class="form-group col-md-6">
+                    <label for="quantity">E-mail</label>
+                    <input type="number" class="form-control contactInput" id="contact_email">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="quantity">Phone</label>
+                    <input type="number" class="form-control contactInput" id="contact_phone">
                   </div>
                 </div>
-              </div>
-              <p class="mx-2">Choose your type of transport</p>
-              <div class="d-flex justify-content-between mb-4">
-                <div class="card contact-card mx-3 active" id='air-contact-card' style="width: 12rem;">
-                  <div class="card-body d-flex flex-column justify-content-between  text-center">
-                    <img src="./img/undraw_aircraft_fbvl.svg" class="card-img-top mb-2" alt="...">
-                    <div>Air</div>
+                <p class="mb-2">Package Detail</p>
+                <div class="input-group form-group col-md-12">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" id="basic-addon1">Dimention(cm)</label>
+                  </div>
+                  <input type="number" class="form-control contactInput" placeholder="Width" aria-label="Width"
+                    id="contact_width">
+                  <input type="number" class="form-control contactInput" placeholder="Height" aria-label="Height"
+                    id="contact_height">
+                  <input type="number" class="form-control contactInput" placeholder="Length" aria-label="Length"
+                    id="contact_length">
+                </div>
+                <div class="form-row mx-2">
+                  <div class="form-group col-md-3">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" class="form-control contactInput" id="contact_quantity">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label for="quantity">Weight(Kgs)</label>
+                    <input type="number" class="form-control contactInput" id="contact_weight">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="to" class="d-block">Type</label>
+                    <div class="btn-group " role="group" aria-label="Basic example">
+                      <button type="button" value="Box"
+                        class="btn btn-secondary type-box contact-type active">Box</button>
+                      <button type="button" value="Carton"
+                        class="btn btn-secondary type-carton contact-type">Carton</button>
+                      <button type="button" value="Pallet"
+                        class="btn btn-secondary type-pallet contact-type">Pallet</button>
+                      <button type="button" value="Wooden case"
+                        class="btn btn-secondary type-wooden contact-type">Wooden
+                        case</button>
+                    </div>
                   </div>
                 </div>
-                <div class="card contact-card mx-3" id='sea-contact-card' style="width: 12rem;">
-                  <div class="card-body  d-flex flex-column justify-content-between text-center">
-                    <img src="./img/undraw_Yacht_8g6r.svg" class="card-img-top mb-2" alt="...">
-                    <div>Sea</div>
+                <p class="mx-2">Choose your type of transport</p>
+                <div class="d-flex justify-content-between mb-4">
+                  <div class="card contact-card mx-3 active" id='air-contact-card' style="width: 12rem;">
+                    <div class="card-body d-flex flex-column justify-content-between  text-center">
+                      <img src="./img/undraw_aircraft_fbvl.svg" class="card-img-top mb-2" alt="...">
+                      <div>Air</div>
+                    </div>
+                  </div>
+                  <div class="card contact-card mx-3" id='sea-contact-card' style="width: 12rem;">
+                    <div class="card-body  d-flex flex-column justify-content-between text-center">
+                      <img src="./img/undraw_Yacht_8g6r.svg" class="card-img-top mb-2" alt="...">
+                      <div>Sea</div>
+                    </div>
+                  </div>
+                  <div class="card contact-card mx-3" id='land-contact-card' style="width: 12rem;">
+                    <div class="card-body  d-flex flex-column justify-content-between text-center">
+                      <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
+                      <div>Land</div>
+                    </div>
                   </div>
                 </div>
-                <div class="card contact-card mx-3" id='land-contact-card' style="width: 12rem;">
-                  <div class="card-body  d-flex flex-column justify-content-between text-center">
-                    <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
-                    <div>Land</div>
+                <div class="form-row mx-2 cinput-tran" id="cair-trans">
+                  <div class="form-group col-md-5">
+                    <label for="exampleFormControlSelect1">Origin</label>
+                    <select class="custom-select cair-from thai-air">
+                    </select>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex justify-content-center align-items-end">
+                    <button class="btn btn-outline-primary" id="cair-swap" type="button"><i
+                        class="fas fa-exchange-alt"></i></button>
+                  </div>
+                  <div class="form-group col-md-5">
+                    <label for="exampleFormControlSelect1">Destination</label>
+                    <select class="custom-select cair-to inter-air">
+                    </select>
                   </div>
                 </div>
-              </div>
-              <div class="form-row mx-2 cinput-tran" id="cair-trans">
-                <div class="form-group col-md-5">
-                  <label for="exampleFormControlSelect1">Origin</label>
-                  <select class="custom-select cair-from thai-air">
-                  </select>
+                <div class="form-row mx-2 cinput-tran hide" id="csea-trans">
+                  <div class="form-group col-md-5">
+                    <label for="exampleFormControlSelect1">Origin</label>
+                    <select class="custom-select csea-from thai-sea">
+                    </select>
+                  </div>
+                  <div class="col-md-2 mb-3 d-flex justify-content-center align-items-end">
+                    <button class="btn btn-outline-primary" id="csea-swap" type="button"><i
+                        class="fas fa-exchange-alt"></i></button>
+                  </div>
+                  <div class="form-group col-md-5">
+                    <label for="exampleFormControlSelect1">Destination</label>
+                    <select class="custom-select csea-to cinter-sea">
+                    </select>
+                  </div>
                 </div>
-                <div class="col-md-2 mb-3 d-flex justify-content-center align-items-end">
-                  <button class="btn btn-outline-primary" id="cair-swap" type="button"><i
-                      class="fas fa-exchange-alt"></i></button>
-                </div>
-                <div class="form-group col-md-5">
-                  <label for="exampleFormControlSelect1">Destination</label>
-                  <select class="custom-select cair-to inter-air">
-                  </select>
-                </div>
-              </div>
-              <div class="form-row mx-2 cinput-tran hide" id="csea-trans">
-                <div class="form-group col-md-5">
-                  <label for="exampleFormControlSelect1">Origin</label>
-                  <select class="custom-select csea-from thai-sea">
-                  </select>
-                </div>
-                <div class="col-md-2 mb-3 d-flex justify-content-center align-items-end">
-                  <button class="btn btn-outline-primary" id="csea-swap" type="button"><i
-                      class="fas fa-exchange-alt"></i></button>
-                </div>
-                <div class="form-group col-md-5">
-                  <label for="exampleFormControlSelect1">Destination</label>
-                  <select class="custom-select csea-to cinter-sea">
-                  </select>
-                </div>
-              </div>
-              <div class="form-row mx-2 cinput-tran hide" id="cland-trans">
-                <div class="form-group col-md-12">
-                  <label for="exampleFormControlSelect1">Origin</label>
-                  <textarea type="text" rows="3" class="form-control" id="cip-from"></textarea>
+                <div class="form-row mx-2 cinput-tran hide" id="cland-trans">
+                  <div class="form-group col-md-12">
+                    <label for="exampleFormControlSelect1">Origin</label>
+                    <textarea type="text" rows="3" class="form-control" id="cip-from"></textarea>
 
+                  </div>
+                  <div class="form-group col-md-12">
+                    <label for="exampleFormControlSelect1">Destination</label>
+                    <textarea type="text" rows="3" class="form-control" id="cip-to"></textarea>
+                  </div>
                 </div>
-                <div class="form-group col-md-12">
-                  <label for="exampleFormControlSelect1">Destination</label>
-                  <textarea type="text" rows="3" class="form-control" id="cip-to"></textarea>
+                <div class="form-group col-md-6 mx-2">
+                  <label for="exampleFormControlFile1">Estimate Time Departure</label>
+                  <input type="date" class="form-control" id="cbooking_etd" min="2019-01-01">
                 </div>
-              </div>
-              <div class="form-group mx-2">
-                <label for="exampleFormControlFile1">Estimate Time Departure</label>
-                <input type="date" class="form-control" id="cbooking_etd" min="2019-01-01">
-              </div>
-              <div class="form-group" id="sentformcontainer">
-                <button type="button" class="btn btn-primary" id="sentContact">Contact</button>
-              </div>
+                <div class="form-group" id="sentformcontainer">
+                  <button type="button" class="btn btn-primary" id="sentContact">Contact</button>
+                </div>
             </form>
+            <div id="completeContact" class="quote-form hide">
+              <div class="circle-btn border border-muted text-muted" id="contract-back">
+                <i class="fas fa-chevron-left "></i>
+
+              </div>
+              <div class="form-head"></div>
+              <div class="card border-primary mb-4">
+
+                <div class="card-body ">
+                  <div class="d-flex justify-content-center">
+                    <img src="./img/undraw_fast_car_p4cu.svg" class="card-img-top mb-2" alt="...">
+                  </div>
+                  <h3>Contact Sent</h3>
+                </div>
+
+              </div>
+            </div>
           </div>
         </div>
       </div>
